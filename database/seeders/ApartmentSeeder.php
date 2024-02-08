@@ -35,14 +35,14 @@ class ApartmentSeeder extends Seeder
         }
     }
 
-    public static function storeimage($img, $name)
+    public static function storeimage($img, $title)
     {
         $myurl = $img;
         $contents = file_get_contents($myurl);
 
-        $name = Str::slug($name, '-') . '.png';
-        $path = 'images/' . $name;
-        Storage::put('images/' . $name, $contents);
+        $title = Str::slug($title, '-') . '.png';
+        $path = 'images/' . $title;
+        Storage::put('images/' . $title, $contents);
         return $path;
     }
 

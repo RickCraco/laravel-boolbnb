@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('title');
-            $table->integer('rooms', 2);
-            $table->integer('beds', 2);
-            $table->integer('bathrooms', 2);
-            $table->integer('square_meters', 5);
+            $table->integer('rooms');
+            $table->integer('beds');
+            $table->integer('bathrooms');
+            $table->integer('square_meters');
             $table->text('address');
             $table->string('cover_img')->nullable();
             $table->string('slug');
             $table->boolean('visible');
-            $table->decimal('lat', 9,6);
-            $table->decimal('lon', 9,6);
-            $table->unsignedBigInteger('user_id')->after('id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->decimal('lat');
+            $table->decimal('lon');
             $table->timestamps();
         });
     }
