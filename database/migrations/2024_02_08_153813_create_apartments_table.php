@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('cover_img')->nullable();
             $table->string('slug');
             $table->boolean('visible');
-            $table->decimal('lat');
-            $table->decimal('lon');
+            $table->decimal('lat', 9,6);
+            $table->decimal('lon', 9, 6);
             $table->timestamps();
         });
     }
