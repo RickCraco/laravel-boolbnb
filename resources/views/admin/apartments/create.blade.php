@@ -2,6 +2,15 @@
 @section('content')
     <section class="container">
         <h1>Create Apartment</h1>
+        @if ($errors->any())
+            <div class="alert  alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="text-black">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{ route('admin.apartments.store') }}"  method="POST" enctype="multipart/form-data">
         @csrf
      <div class="mb-3">

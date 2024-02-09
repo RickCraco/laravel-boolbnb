@@ -23,14 +23,15 @@ class StoreApartmentRequest extends FormRequest
     {
         return [
             'title'=> 'required|min:5|max:255',
+            'beds'=> 'required|integer',
             'rooms'=> 'required|integer',
             'bathrooms'=> 'required|integer',
             'square_meters'=> 'required|integer',
             'address'=> 'required|min:5',
             'cover_img'=> 'nullable|image',
             'services'=> 'exists:services,id',
-            'lat'=> 'required',
-            'lon'=> 'required',
+            'lat'=> 'nullable',
+            'lon'=> 'nullable',
             'visible'=> 'required',
             'user_id'=> 'exists:users,id',
         ];

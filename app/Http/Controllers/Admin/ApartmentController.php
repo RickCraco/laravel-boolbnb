@@ -46,17 +46,14 @@ class ApartmentController extends Controller
         $formdata['slug'] = $slug;
         $userId = Auth::id();
         $formdata['user_id'] = $userId;
-        /*
-        $client = new Client();
+        
+        $client = new Client(['verify' => false]);
         $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
 
-        if($response->getStatusCode() == 200){
-            $body = json_decode($response->getBody(), true);
-            $formdata['lat'] = $body['results'][0]['position']['lat'];
-            $formdata['lon'] = $body['results'][0]['position']['lon'];
-        } */
-        $formdata['lat'] = 1;
-        $formdata['lon'] = 1;
+        $body = json_decode($response->getBody(), true);
+        
+        $formdata['lat'] = $body['results'][0]['position']['lat'];
+        $formdata['lon'] = $body['results'][0]['position']['lon'];
 
         if($request->hasFile('cover_img')){
             $path = Storage::put('images', $formdata['cover_img']);
@@ -106,14 +103,13 @@ class ApartmentController extends Controller
         $formdata = $request->validated();
         $formdata['slug'] = $apartment->slug;
 
-        $client = new Client();
+        $client = new Client(['verify' => false]);
         $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
 
-        if($response->getStatusCode() == 200){
-            $body = json_decode($response->getBody(), true);
-            $formdata['lat'] = $body->results[0]->position->lat;
-            $formdata['lon'] = $body->results[0]->position->lon;
-        }
+        $body = json_decode($response->getBody(), true);
+        
+        $formdata['lat'] = $body['results'][0]['position']['lat'];
+        $formdata['lon'] = $body['results'][0]['position']['lon'];
 
         if($apartment->title != $formdata['title']){
             $slug = Apartment::getSlug($formdata['title']);
