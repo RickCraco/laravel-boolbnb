@@ -78,7 +78,7 @@
 
     <div class="mb-3">
         <label for="images">Images</label>
-        <input type="file" class="@error('images') is-invalid @enderror" name="images[]" id="images" multiple accept="images/*">
+        <input type="file" class="@error('images') is-invalid @enderror" name="images[]" id="images" multiple>
         @error('images')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

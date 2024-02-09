@@ -10,6 +10,7 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = ['apartment_id', 'url', 'title'];
+    protected $casts = ['images' => 'array'];
 
     public function apartment()
     {
