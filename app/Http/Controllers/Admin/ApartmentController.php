@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use GuzzleHttp\Client;
 
 class ApartmentController extends Controller
 {
@@ -27,7 +28,8 @@ class ApartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.apartments.create');
+        $services = Service::all();
+        return view('admin.apartments.create', compact('services'));
     }
 
     /**
@@ -38,6 +40,15 @@ class ApartmentController extends Controller
         $formdata = $request->validated();
         $slug = Str::slug($formdata['title'], '-');
         $formdata['slug'] = $slug;
+        
+        $client = new Client();
+        $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+
+        if($response->getStatusCode() == 200){
+            $body = json_decode($response->getBody(), true);
+            $formdata['lat'] = $body->results[0]->position->lat;
+            $formdata['lon'] = $body->results[0]->position->lon;
+        }
 
         if($request->hasFile('cover_image')){
             $path = Storage::put('images', $formdata['cover_image']);
@@ -45,6 +56,15 @@ class ApartmentController extends Controller
         }
 
         $newApartment = Apartment::create($formdata);
+
+        if($request->hasFile('images')){
+            $images = $request->file('images');
+
+            foreach($images as $image){
+                $path = Storage::put('images', $image);
+                $newApartment->images()->create(['url' => $path, 'title' => $newApartment->title]);
+            }
+        }
 
         if($request->services){
             $newApartment->services()->attach($request->services);
@@ -66,7 +86,8 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-        return view('admin.apartments.edit', compact('apartment'));
+        $services = Service::all();
+        return view('admin.apartments.edit', compact('apartment', 'services'));
     }
 
     /**
@@ -76,6 +97,15 @@ class ApartmentController extends Controller
     {
         $formdata = $request->validated();
         $formdata['slug'] = $slug;
+
+        $client = new Client();
+        $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+
+        if($response->getStatusCode() == 200){
+            $body = json_decode($response->getBody(), true);
+            $formdata['lat'] = $body->results[0]->position->lat;
+            $formdata['lon'] = $body->results[0]->position->lon;
+        }
 
         if($apartment->title != $formdata['title']){
             $slug = Apartment::getSlug($formdata['title']);
@@ -94,6 +124,16 @@ class ApartmentController extends Controller
 
         $apartment->update($formdata);
 
+        if($request->hasFile('images')){
+            $apartment->images()->delete();
+            $images = $request->file('images');
+
+            foreach($images as $image){
+                $path = Storage::put('images', $image);
+                $apartment->images()->create(['url' => $path, 'title' => $apartment->title]);
+            }
+        }
+
         if($request->has('services')){
             $apartment->services()->sync($request->services);
         }else{
@@ -111,6 +151,8 @@ class ApartmentController extends Controller
         if($apartment->cover_image){
             Storage::delete($apartment->cover_image);
         }
+
+        $apartment->images()->delete();
 
         $apartment->services()->detach();
         $apartment->delete();

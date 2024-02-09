@@ -29,6 +29,8 @@ class UpdateApartmentRequest extends FormRequest
             'address'=> 'required|min:5',
             'cover_image'=> 'nullable|image',
             'services'=> 'exists:services,id',
+            'lat'=> 'required',
+            'lon'=> 'required',
         ];
     }
 }
