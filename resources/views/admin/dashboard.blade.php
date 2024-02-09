@@ -19,7 +19,7 @@
 
                     {{ __('You are logged in!') }}
                     <div class="mt-3">
-                        <a href="{{ route('admin.projects.index') }}" class="btn btn-danger">Control Panel</a>
+                        <a href="{{ route('admin.apartments.index') }}" class="btn btn-danger">Control Panel</a>
                     </div>
                 </div>
             </div>
