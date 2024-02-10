@@ -6,7 +6,7 @@
         @csrf
         @method('PUT')
      <div class="mb-3">
-            <label for="title">Title</label>
+            <label class="text-white" for="title">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200" value="{{ old('title', $apartment->title) }}">
             @error('title')
@@ -15,7 +15,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="rooms">Rooms</label>
+        <label class="text-white" for="rooms">Rooms</label>
         <input type="text" class="form-control @error('rooms') is-invalid @enderror" name="rooms" id="rooms" value="{{ old('rooms', $apartment->rooms) }}">
         @error('rooms')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="beds">Beds</label>
+        <label class="text-white" for="beds">Beds</label>
         <input type="text" class="form-control @error('beds') is-invalid @enderror" name="beds" id="beds" value="{{ old('beds', $apartment->beds) }}">
         @error('beds')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="bathrooms">Bathrooms</label>
+        <label class="text-white" for="bathrooms">Bathrooms</label>
         <input type="text" class="form-control @error('bathrooms') is-invalid @enderror" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}">
         @error('bathrooms')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -39,7 +39,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="square_meters">Square Meters</label>
+        <label class="text-white" for="square_meters">Square Meters</label>
         <input type="text" class="form-control @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" value="{{ old('square_meters', $apartment->square_meters) }}">
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="address">Address</label>
+        <label class="text-white" for="address">Address</label>
         <input type="text" class="form-control @error('address') is-invalid @enderror" name="address" id="address" value="{{ old('address', $apartment->address) }}">
         @error('address')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -61,7 +61,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="cover_img">Preview Image</label>
+        <label class="text-white" for="cover_img">Preview Image</label>
         <input type="file" class="form-control @error('cover_img') is-invalid @enderror" name="cover_img" id="cover_img" value="{{old('cover_img', $apartment->cover_img)}}">
         @error('cover_img')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="mb-3">
-                <label for="images">Images</label>
+                <label class="text-white" for="images">Images</label>
                 <input type="file" class="form-control @error('images') is-invalid @enderror" name="images[]" id="images" multiple accept="images/*" value="{{old('images', $apartment->images)}}">
                 @error('images')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -77,15 +77,17 @@
     </div>
 
     <div class="mb-3">
-        <label for="visible">Visible</label>
+        <label class="text-white" for="visible">Visible</label>
         <input type="radio" name="visible" id="visible" value="1" {{ old('visible', $apartment->visible) ? 'checked' : '' }}>
+        <label class="text-white" for="visible">Not Visible</label>
+        <input type="radio" name="visible" id="visible" value="0" {{ old('visible', $apartment->visible) ? 'checked' : '' }}>
         @error('visible')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="mb-3">
-        <h6>Services:</h6>
+        <h6 class="text-white">Services:</h6>
             <div class="form-group d-flex flex-wrap gap-3">
                 @foreach ($services as $service)
                     <div class="form-check @error('services') is-invalid @enderror">
@@ -98,7 +100,7 @@
                                 value="{{ $service->id }}"
                                 {{ $apartment->services->contains($service->id) ? 'checked' : '' }}>
                         @endif
-                        <label class="form-check-label">
+                        <label class="form-check-label text-white">
                         {{ $service->name }}
                         </label>
                     </div>
