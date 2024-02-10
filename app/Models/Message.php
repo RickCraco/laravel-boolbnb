@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['apartment_id', 'url', 'title'];
+    protected $fillable = ['apartment_id', 'name', 'surname', 'phone_number', 'email', 'body'];
 
     public function apartment()
     {
