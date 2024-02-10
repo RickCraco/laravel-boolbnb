@@ -49,4 +49,9 @@ class Apartment extends Model
     {
         return $this->hasMany(Visual::class);
     }
+
+    public function sponsor()
+    {
+        return $this->belongsToMany(Sponsor::class);
+    }
 }
