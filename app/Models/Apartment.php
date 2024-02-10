@@ -44,4 +44,9 @@ class Apartment extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    public function visual()
+    {
+        return $this->hasMany(Visual::class);
+    }
 }
