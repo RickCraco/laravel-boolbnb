@@ -87,6 +87,16 @@ class ApartmentController extends Controller
     }
 
     /**
+     * Controls the sponsoring of the specified resource.
+     */
+    /*
+     public function sponsorship(Request $request, Apartment $apartment){
+         if($request->has('sponsor')){
+             $apartment->sponsors()->attach($request->sponsor);
+         }
+     } */
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Apartment $apartment)
