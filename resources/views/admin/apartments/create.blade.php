@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <section class="container">
+    <section class="container mb-3">
         <h1>Create Apartment</h1>
         @if ($errors->any())
             <div class="alert  alert-danger">
@@ -15,7 +15,7 @@
         @csrf
      <div class="mb-3">
             <label class="text-white" for="title">Title</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
+            <input type="text" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200">
             @error('title')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -24,7 +24,11 @@
 
     <div class="mb-3">
         <label class="text-white" for="rooms">Rooms</label>
-        <input type="text" class="form-control @error('rooms') is-invalid @enderror" name="rooms" id="rooms">
+        <br>
+        <div class="d-flex align-items-center">
+            <input type="range" class="@error('rooms') is-invalid @enderror my-form-range1 form-range w-25" name="rooms" id="rooms" min="1" max="20" step="1" value="1">
+            <span class="text-white ms-2"><output class="range-value1"></output></span>
+        </div>
         @error('rooms')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -32,7 +36,11 @@
 
     <div class="mb-3">
         <label class="text-white" for="beds">Beds</label>
-        <input type="text" class="form-control @error('beds') is-invalid @enderror" name="beds" id="beds">
+        <br>
+        <div class="d-flex align-items-center">
+            <input type="range" class="@error('beds') is-invalid @enderror my-form-range2 form-range w-25" name="beds" id="beds" min="1" max="30" step="1" value="1">
+            <span class="text-white ms-2"><output class="range-value2"></output></span>
+        </div>
         @error('beds')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -40,7 +48,11 @@
 
     <div class="mb-3">
         <label class="text-white" for="bathrooms">Bathrooms</label>
-        <input type="text" class="form-control @error('bathrooms') is-invalid @enderror" name="bathrooms" id="bathrooms" >
+        <br>
+        <div class="d-flex align-items-center">
+            <input type="range" class="@error('bathrooms') is-invalid @enderror my-form-range3 form-range w-25" name="bathrooms" id="bathrooms" min="1" max="20" step="1" value="1">
+            <span class="text-white ms-2"><output class="range-value3"></output></span>
+        </div>
         @error('bathrooms')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -48,7 +60,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="square_meters">Square Meters</label>
-        <input type="text" class="form-control @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters">
+        <input type="number" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1">
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -56,7 +68,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="address">Address</label>
-        <input type="text" class="form-control @error('address') is-invalid @enderror" name="address" id="address">
+        <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City">
         @error('address')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -70,7 +82,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="cover_img">Preview Image</label>
-        <input type="file" class="form-control @error('cover_img') is-invalid @enderror" name="cover_img" id="cover_img">
+        <input type="file" class="form-control w-25 @error('cover_img') is-invalid @enderror" name="cover_img" id="cover_img">
         @error('cover_img')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -78,7 +90,8 @@
 
     <div class="mb-3">
         <label class="text-white" for="images">Images</label>
-        <input type="file" class="@error('images') is-invalid @enderror" name="images[]" id="images" multiple>
+        <br>
+        <input type="file" class="form-control w-25 @error('images') is-invalid @enderror" name="images[]" id="images" multiple>
         @error('images')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -107,7 +120,7 @@
                                 value="{{ $service->id }}">
                         @endif
                         <label class="form-check-label text-white">
-                        {{ $service->name }}
+                        {{ $service->name }} <i class="{{ $service->icon }}"></i>
                         </label>
                     </div>
                 @endforeach
