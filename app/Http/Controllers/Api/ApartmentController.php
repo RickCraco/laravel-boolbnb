@@ -10,12 +10,12 @@ class ApartmentController extends Controller
 {
     public function index()
     {
-        $apartments = Apartment::all();
+        $apartments = Apartment::all()->load(['user']);
         return response()->json($apartments);
     }
 
     public function show(Apartment $apartment)
     {
-        return response()->json($apartment);
+        return response()->json($apartment->load(['user']));
     }
 }
