@@ -10,8 +10,8 @@ class ApartmentController extends Controller
 {
     public function index()
     {
-        $apartments = Apartment::all()->load(['user']);
-        return response()->json($apartments);
+        $apartments = Apartment::where('visible','=', 1)->get();
+        return response()->json($apartments->load(['user']));
     }
 
     public function show(Apartment $apartment)
