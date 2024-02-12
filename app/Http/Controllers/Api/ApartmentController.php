@@ -18,4 +18,20 @@ class ApartmentController extends Controller
     {
         return response()->json($apartment->load(['user']));
     }
+
+    public function search(Request $request){
+        $apartments = Apartment::query();
+
+        if($request->filled('search')){
+            $searchTerm = $request->input('search');
+            $apartments->where(function($query) use ($searchTerm){
+                $query->where('title', 'like', "%$searchTerm%")
+                ->orWhere('address', 'like', "%$searchTerm%");
+            });
+        }
+
+        $filteredApartments = $apartments->get();
+
+        return response()->json($filteredApartments->load(['user']));
+    }
 }
