@@ -29,6 +29,8 @@ class ApartmentController extends Controller
                 $query->where('title', 'like', "%$searchTerm%")
                 ->orWhere('address', 'like', "%$searchTerm%");
             });
+
+            $apartments->where('visible', '=', 1);
         }
 
         $filteredApartments = $apartments->get();
