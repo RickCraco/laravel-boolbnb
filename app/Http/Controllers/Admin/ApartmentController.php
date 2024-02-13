@@ -83,7 +83,7 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-        if($apartment->user()->id == Auth::id()){
+        if($apartment->user_id == Auth::id()){
             return view('admin.apartments.show', compact('apartment'));
         }else{
             abort(403);
@@ -105,7 +105,7 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-        if($apartment->user()->id == Auth::id()){
+        if($apartment->user_id == Auth::id()){
             $services = Service::all();
             return view('admin.apartments.edit', compact('apartment', 'services'));
         }else{
