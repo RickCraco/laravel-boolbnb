@@ -2,6 +2,15 @@
 @section('content')
     <section class="container">
         <h1>Edit {{$apartment->title}}</h1>
+        @if ($errors->any())
+            <div class="alert  alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="text-black">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{ route('admin.apartments.update', $apartment) }}"  method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -80,7 +89,7 @@
         <label class="text-white" for="visible">Visible</label>
         <input type="radio" name="visible" id="visible" value="1" {{ old('visible', $apartment->visible) ? 'checked' : '' }}>
         <label class="text-white" for="visible">Not Visible</label>
-        <input type="radio" name="visible" id="visible" value="0" {{ old('visible', $apartment->visible) ? 'checked' : '' }}>
+        <input type="radio" name="visible" id="visible" value="0" {{ old('visible', $apartment->visible) ? '' : 'checked' }}>
         @error('visible')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -94,7 +103,7 @@
                         @if ($errors->any())
                             <input type="checkbox" class="  form-check-input" name="services[]"
                                 value="{{ $service->id }}"
-                                {{ in_array($service->id, old('services', $apartment->services)) ? 'checked' : '' }}>
+                                {{ in_array($service->id, old('services', $apartment->services->pluck('id')->toArray())) ? 'checked' : '' }}>
                         @else
                             <input type="checkbox" class="p-0 form-check-input" name="services[]"
                                 value="{{ $service->id }}"

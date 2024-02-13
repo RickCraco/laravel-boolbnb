@@ -52,6 +52,7 @@ class UpdateApartmentRequest extends FormRequest
             'address.required' => 'L\'indirizzo è obbligatorio',
             'address.min' => 'L\'indirizzo deve avere almeno :min caratteri',
             'cover_img.image' => 'L\'immagine deve essere un\'immagine',
+            'services.required' => 'Devi scegliere almeno un servizio',
         ];
     }
 }
