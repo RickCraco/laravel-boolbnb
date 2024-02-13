@@ -17,7 +17,7 @@ class ApartmentController extends Controller
 
     public function show(Apartment $apartment)
     {
-        return response()->json($apartment->load(['user']));
+        return response()->json($apartment->load(['user', 'images', 'services', 'sponsor']));
     }
 
     public function search(Request $request){
