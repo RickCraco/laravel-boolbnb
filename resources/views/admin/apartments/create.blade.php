@@ -13,49 +13,51 @@
         @endif
         <form action="{{ route('admin.apartments.store') }}"  method="POST" enctype="multipart/form-data">
         @csrf
-     <div class="mb-3">
+        <div class="mb-3">
             <label class="text-white" for="title">Title</label>
             <input type="text" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200">
             @error('title')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-    </div>
-
-    <div class="mb-3">
-        <label class="text-white" for="rooms">Rooms</label>
-        <br>
-        <div class="d-flex align-items-center">
-            <input type="range" class="@error('rooms') is-invalid @enderror my-form-range1 form-range w-25" name="rooms" id="rooms" min="1" max="20" step="1" value="1">
-            <span class="text-white ms-2"><output class="range-value1"></output></span>
         </div>
-        @error('rooms')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
 
-    <div class="mb-3">
-        <label class="text-white" for="beds">Beds</label>
-        <br>
-        <div class="d-flex align-items-center">
-            <input type="range" class="@error('beds') is-invalid @enderror my-form-range2 form-range w-25" name="beds" id="beds" min="1" max="30" step="1" value="1">
-            <span class="text-white ms-2"><output class="range-value2"></output></span>
+    <div class="mb-3 d-flex">
+        <div class="">
+            <label class="text-white" for="rooms">Rooms</label>
+            <br>
+            <div class="d-flex align-items-center">
+                <input type="number" class="@error('rooms') is-invalid @enderror form-control w-50" name="rooms" id="rooms" min="1" required>
+                <span class="text-white ms-2"><output class="range-value1"></output></span>
+            </div>
+            @error('rooms')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
-        @error('beds')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
 
-    <div class="mb-3">
-        <label class="text-white" for="bathrooms">Bathrooms</label>
-        <br>
-        <div class="d-flex align-items-center">
-            <input type="range" class="@error('bathrooms') is-invalid @enderror my-form-range3 form-range w-25" name="bathrooms" id="bathrooms" min="1" max="20" step="1" value="1">
-            <span class="text-white ms-2"><output class="range-value3"></output></span>
+        <div class="">
+            <label class="text-white" for="beds">Beds</label>
+            <br>
+            <div class="d-flex align-items-center">
+                <input type="number" class="@error('beds') is-invalid @enderror form-control w-50" name="beds" id="beds" min="1" required>
+                <span class="text-white ms-2"><output class="range-value2"></output></span>
+            </div>
+            @error('beds')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
-        @error('bathrooms')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
+        <div class="">
+            <label class="text-white" for="bathrooms">Bathrooms</label>
+            <br>
+            <div class="d-flex align-items-center">
+                <input type="number" class="@error('bathrooms') is-invalid @enderror form-control w-50" name="bathrooms" id="bathrooms" min="1" required>
+                <span class="text-white ms-2"><output class="range-value3"></output></span>
+            </div>
+            @error('bathrooms')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
 
     <div class="mb-3">
