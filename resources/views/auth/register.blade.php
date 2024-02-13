@@ -70,7 +70,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" onkeyup="checkPassword()"  class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -84,13 +84,17 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" onkeyup="checkPassword()"  type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <span>
+                                    <strong id="password-error"></strong>
+                                </span>
                             </div>
+
                         </div>
 
                         <div class="mb-4 row">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" id="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -101,4 +105,27 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    function checkPassword() {
+        let psw = document.getElementById('password').value;
+        let confirmPsw = document.getElementById('password-confirm').value;
+        let pswError = document.getElementById('password-error');
+        let submitButton = document.getElementById('submit');
+        if(psw == confirmPsw && psw != "" && confirmPsw != "") {
+            submitButton.disabled = false;
+            pswError.style.color = 'green';
+            pswError.innerHTML = "Passwords match!";
+        }else if(psw == '' && confirmPsw == '' ){
+            pswError.innerHTML = "";
+        } else {
+            submitButton.disabled = true;
+            pswError.style.color = 'red';
+            pswError.innerHTML = "Passwords don't match!";
+        }
+    }
+
+    </script>
+
 @endsection
