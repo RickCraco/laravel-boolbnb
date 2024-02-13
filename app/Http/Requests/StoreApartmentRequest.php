@@ -29,7 +29,7 @@ class StoreApartmentRequest extends FormRequest
             'square_meters'=> 'required|integer|min:1',
             'address'=> 'required|min:5',
             'cover_img'=> 'nullable|image',
-            'services'=> 'exists:services,id',
+            'services'=> 'exists:services,id|required|array|min:1',
             'lat'=> 'nullable',
             'lon'=> 'nullable',
             'visible'=> 'required',
