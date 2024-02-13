@@ -83,7 +83,11 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-        return view('admin.apartments.show', compact('apartment'));
+        if($apartment->user()->id == Auth::id()){
+            return view('admin.apartments.show', compact('apartment'));
+        }else{
+            abort(403);
+        }
     }
 
     /**
@@ -101,8 +105,12 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-        $services = Service::all();
-        return view('admin.apartments.edit', compact('apartment', 'services'));
+        if($apartment->user()->id == Auth::id()){
+            $services = Service::all();
+            return view('admin.apartments.edit', compact('apartment', 'services'));
+        }else{
+            abort(403);
+        }
     }
 
     /**
