@@ -23,36 +23,33 @@
         </div>
 
     <div class="mb-3 d-flex">
-        <div class="">
+        <div>
             <label class="text-white" for="rooms">Rooms</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" class="@error('rooms') is-invalid @enderror form-control w-50" name="rooms" id="rooms" min="1" required>
-                <span class="text-white ms-2"><output class="range-value1"></output></span>
             </div>
             @error('rooms')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
-        <div class="">
+        <div>
             <label class="text-white" for="beds">Beds</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" class="@error('beds') is-invalid @enderror form-control w-50" name="beds" id="beds" min="1" required>
-                <span class="text-white ms-2"><output class="range-value2"></output></span>
             </div>
             @error('beds')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
-        <div class="">
+        <div>
             <label class="text-white" for="bathrooms">Bathrooms</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" class="@error('bathrooms') is-invalid @enderror form-control w-50" name="bathrooms" id="bathrooms" min="1" required>
-                <span class="text-white ms-2"><output class="range-value3"></output></span>
             </div>
             @error('bathrooms')
                 <div class="invalid-feedback">{{ $message }}</div>

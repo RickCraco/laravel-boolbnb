@@ -19,12 +19,12 @@
                         <form action="{{ route('admin.apartments.destroy', $apartment) }}" method="POST" class="mx-2">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button type="submit" class="delete-button btn btn-danger" data-item-title="{{ $apartment->title }}"><i class="fa-solid fa-trash"></i></button>
                         </form>
                     </div>
                 </li>
             @endforeach
         </ul>
-
     </section>
+    @include('partials.modal_delete')
 @endsection
