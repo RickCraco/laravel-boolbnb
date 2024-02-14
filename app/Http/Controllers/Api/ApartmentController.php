@@ -55,7 +55,7 @@ class ApartmentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'surname' => 'required',
-            'phone_number' => 'required',
+            'phone_number' => 'nullable',
             'email' => 'required|email',
             'body' => 'required'
         ]);
