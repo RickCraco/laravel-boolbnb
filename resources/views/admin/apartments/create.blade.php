@@ -11,7 +11,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('admin.apartments.store') }}"  method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.apartments.store') }}"  method="POST" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="mb-3">
             <label class="text-white" for="title">Title</label>
@@ -67,7 +67,10 @@
 
     <div class="mb-3">
         <label class="text-white" for="address">Address</label>
-        <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City">
+        <div>
+            <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList">
+            <datalist id="addressList" class="autocomplete"></datalist>
+        </div>
         @error('address')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -134,4 +137,26 @@
 
         </form>
     </section>
+
+<script>
+    document.getElementById('address').addEventListener('input', function() {
+        const input = this.value.trim();
+        if (input.length > 0) {
+            const datalist = document.getElementById('addressList');
+            datalist.innerHTML = ''; // Pulisce le opzioni precedenti
+            fetch('https://api.tomtom.com/search/2/search/' + input + '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs')
+                .then(response => response.json())
+                .then(data => {
+                    data.results.forEach(result => {
+                        const option = document.createElement('option');
+                        option.value = result.address.freeformAddress;
+                        datalist.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Si è verificato un errore durante il recupero dei dati:', error));
+        }
+    });
+</script>
+
+
 @endsection
