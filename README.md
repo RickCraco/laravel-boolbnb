@@ -160,6 +160,8 @@ php artisan make:controller NomeController
 php artisan make:controller NomeController --resource
 
 
+
+
 #creo model
 php artisan make:model Nome 
 #posso creare il model e contestualmente resource controller, migration, seeder e form request per validazioni
