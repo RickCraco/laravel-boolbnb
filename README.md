@@ -127,6 +127,7 @@ php artisan key:generate
 
 npm install
 
+php artisan storage:link
 # creo il database da phpmyadmin
 
 # inserisco i dati per il collegamento al db in env
