@@ -127,6 +127,7 @@ php artisan key:generate
 
 npm install
 
+php artisan storage:link
 # creo il database da phpmyadmin
 
 # inserisco i dati per il collegamento al db in env
@@ -157,6 +158,8 @@ Route::resource('books', BookController::class);
 php artisan make:controller NomeController
 #con opzione resource controller
 php artisan make:controller NomeController --resource
+
+
 
 
 #creo model
