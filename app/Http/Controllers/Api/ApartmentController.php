@@ -47,6 +47,6 @@ class ApartmentController extends Controller
             Cache::put($cacheKey, true, now()->addHours(24));
         }
 
-        return response()->json(['message' => 'Visualizzazione registrate con successo'], 200);
+        return response()->json(['message' => 'Visualizzazione registrate con successo'], 200); 
     }
 }
