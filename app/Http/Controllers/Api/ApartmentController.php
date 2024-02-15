@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Client;
 
 class ApartmentController extends Controller
 {
@@ -29,6 +30,70 @@ class ApartmentController extends Controller
             $apartments->where(function($query) use ($searchTerm){
                 $query->where('title', 'like', "%$searchTerm%")
                 ->orWhere('address', 'like', "%$searchTerm%");
+            });
+        }
+
+        if($request->filled('radius') && $request->filled('search')){
+            $radius = $request->input('radius');
+            $latC = 0;
+            $lonC = 0;
+            $client = new Client(['verify' => false]);
+            $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$request->input('search').'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+
+            $body = json_decode($response->getBody(), true);
+
+            $latC = $body['results'][0]['position']['lat'];
+            $lonC = $body['results'][0]['position']['lon'];
+
+            $distLat = $radius / 110.574;
+            $distLon = $radius / 111.320 * cos(deg2rad($latC));
+
+            $minLat = $latC - $distLat;
+            $maxLat = $latC + $distLat;
+            $minLon = $lonC - $distLon;
+            $maxLon = $lonC + $distLon;
+
+            $apartments->whereBetween('lat', [$minLat, $maxLat])
+            ->whereBetween('lon', [$minLon, $maxLon]);
+        }elseif(!$request->filled('radius') && $request->filled('search')){
+            $radius = 20;
+            $latC = 0;
+            $lonC = 0;
+            $client = new Client(['verify' => false]);
+            $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$request->input('search').'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+
+            $body = json_decode($response->getBody(), true);
+
+            $latC = $body['results'][0]['position']['lat'];
+            $lonC = $body['results'][0]['position']['lon'];
+
+            $distLat = $radius / 110.574;
+            $distLon = $radius / 111.320 * cos(deg2rad($latC));
+
+            $minLat = $latC - $distLat;
+            $maxLat = $latC + $distLat;
+            $minLon = $lonC - $distLon;
+            $maxLon = $lonC + $distLon;
+
+            $apartments->whereBetween('lat', [$minLat, $maxLat])
+            ->whereBetween('lon', [$minLon, $maxLon]);
+        }
+
+        if($request->filled('rooms')){
+            $apartments->where('rooms', '=', $request->input('rooms'));
+        }
+
+        if($request->filled('beds')){
+            $apartments->where('beds', '=', $request->input('beds'));
+        }
+
+        if($request->filled('bathrooms')){
+            $apartments->where('bathrooms', '=', $request->input('bathrooms'));
+        }
+
+        if($request->filled('services')){
+            $apartments->whereHas('services', function($query) use ($request){
+                $query->whereIn('name', $request->input('services'));
             });
         }
 
