@@ -14,7 +14,7 @@ class ApartmentController extends Controller
     public function index()
     {
         $apartments = Apartment::where('visible','=', 1)->get();
-        return response()->json($apartments->load(['user']));
+        return response()->json($apartments->load(['user', 'images']));
     }
 
     public function show(Apartment $apartment)
@@ -100,7 +100,7 @@ class ApartmentController extends Controller
         $apartments->where('visible', '=', 1);
         $filteredApartments = $apartments->get();
 
-        return response()->json($filteredApartments->load(['user']));
+        return response()->json($filteredApartments->load(['user', 'images']));
     }
 
     public function recordView(Apartment $apartment, Request $request){
