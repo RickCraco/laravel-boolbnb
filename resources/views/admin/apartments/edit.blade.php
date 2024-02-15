@@ -26,7 +26,7 @@
     <div class="mb-3 d-flex">
         <div class="">
             <label class="text-white" for="rooms">Rooms</label>
-            <input type="number" class="form-control w-50 @error('rooms') is-invalid @enderror" name="rooms" id="rooms" value="{{ old('rooms', $apartment->rooms) }}" required>
+            <input type="number" min="1" class="form-control w-50 @error('rooms') is-invalid @enderror" name="rooms" id="rooms" value="{{ old('rooms', $apartment->rooms) }}" required>
             @error('rooms')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -34,7 +34,7 @@
 
         <div class="">
             <label class="text-white" for="beds">Beds</label>
-            <input type="number" class="form-control w-50 @error('beds') is-invalid @enderror" name="beds" id="beds" value="{{ old('beds', $apartment->beds) }}" required>
+            <input type="number" min="1" class="form-control w-50 @error('beds') is-invalid @enderror" name="beds" id="beds" value="{{ old('beds', $apartment->beds) }}" required>
             @error('beds')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -42,7 +42,7 @@
 
         <div class="">
             <label class="text-white" for="bathrooms">Bathrooms</label>
-            <input type="number" class="form-control w-50 @error('bathrooms') is-invalid @enderror" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}" required>
+            <input type="number" min="1" class="form-control w-50 @error('bathrooms') is-invalid @enderror" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}" required>
             @error('bathrooms')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -51,7 +51,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="square_meters">Square Meters</label>
-        <input type="number" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" value="{{ old('square_meters', $apartment->square_meters) }}">
+        <input type="number" min="1" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" value="{{ old('square_meters', $apartment->square_meters) }}">
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

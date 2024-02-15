@@ -59,7 +59,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="square_meters">Square Meters</label>
-        <input type="number" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1">
+        <input type="number" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1" required>
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -68,7 +68,7 @@
     <div class="mb-3">
         <label class="text-white" for="address">Address</label>
         <div>
-            <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList">
+            <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList" required>
             <datalist id="addressList" class="autocomplete"></datalist>
         </div>
         @error('address')
