@@ -96,9 +96,11 @@ class ApartmentController extends Controller
 
             $services = explode(',', $services);
         
-            $apartments->whereHas('services', function ($query) use ($services) {
-                $query->whereIn('name', $services);
-            });
+            foreach ($services as $service) {
+                $apartments->whereHas('services', function ($query) use ($service) {
+                    $query->where('name', $service);
+                });
+            }
         }        
 
         $apartments->where('visible', '=', 1);
