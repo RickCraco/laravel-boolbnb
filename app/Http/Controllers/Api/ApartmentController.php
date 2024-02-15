@@ -94,12 +94,8 @@ class ApartmentController extends Controller
         if($request->filled('services')){
             $services = $request->input('services');
 
-            if(!is_array($services)){
-                $services = explode(',', $services);
-            }
-
             $apartments->whereHas('services', function($query) use ($request){
-                $query->whereIn('name', $request->input('services'));
+                $query->where('name', 'like', '%' . $request->input('services') . '%');
             });
         }
 
