@@ -22,92 +22,79 @@ class ApartmentController extends Controller
         return response()->json($apartment->load(['user', 'images', 'services', 'sponsor']));
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $apartments = Apartment::query();
 
-        if($request->filled('search')){
+        if ($request->filled('search')) {
             $searchTerm = $request->input('search');
             $apartments->where(function($query) use ($searchTerm){
                 $query->where('title', 'like', "%$searchTerm%")
-                ->orWhere('address', 'like', "%$searchTerm%");
+                    ->orWhere('address', 'like', "%$searchTerm%");
             });
         }
 
-        if($request->filled('radius') && $request->filled('search')){
+        if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            $latC = 0;
-            $lonC = 0;
-            $client = new Client(['verify' => false]);
-            $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$request->input('search').'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+            if (!isset($searchTerm)) {
+                // Se il termine di ricerca non è stato impostato, non è possibile eseguire la ricerca geografica
+                $apartments->where('visible', '=', 0); // Imposta una condizione falsa per non restituire risultati
+            } else {
+                $client = new Client(['verify' => false]);
+                $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+                $body = json_decode($response->getBody(), true);
 
-            $body = json_decode($response->getBody(), true);
+                if (isset($body['results'][0]['position']['lat']) && isset($body['results'][0]['position']['lon'])) {
+                    $latC = $body['results'][0]['position']['lat'];
+                    $lonC = $body['results'][0]['position']['lon'];
 
-            $latC = $body['results'][0]['position']['lat'];
-            $lonC = $body['results'][0]['position']['lon'];
+                    $distLat = $radius / 110.574;
+                    $distLon = $radius / 111.320 * cos(deg2rad($latC));
 
-            $distLat = $radius / 110.574;
-            $distLon = $radius / 111.320 * cos(deg2rad($latC));
+                    $minLat = $latC - $distLat;
+                    $maxLat = $latC + $distLat;
+                    $minLon = $lonC - $distLon;
+                    $maxLon = $lonC + $distLon;
 
-            $minLat = $latC - $distLat;
-            $maxLat = $latC + $distLat;
-            $minLon = $lonC - $distLon;
-            $maxLon = $lonC + $distLon;
-
-            $apartments->whereBetween('lat', [$minLat, $maxLat])
-            ->whereBetween('lon', [$minLon, $maxLon]);
-        }elseif(!$request->filled('radius') && $request->filled('search')){
-            $radius = 20;
-            $latC = 0;
-            $lonC = 0;
-            $client = new Client(['verify' => false]);
-            $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$request->input('search').'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
-
-            $body = json_decode($response->getBody(), true);
-
-            $latC = $body['results'][0]['position']['lat'];
-            $lonC = $body['results'][0]['position']['lon'];
-
-            $distLat = $radius / 110.574;
-            $distLon = $radius / 111.320 * cos(deg2rad($latC));
-
-            $minLat = $latC - $distLat;
-            $maxLat = $latC + $distLat;
-            $minLon = $lonC - $distLon;
-            $maxLon = $lonC + $distLon;
-
-            $apartments->whereBetween('lat', [$minLat, $maxLat])
-            ->whereBetween('lon', [$minLon, $maxLon]);
+                    $apartments->whereBetween('lat', [$minLat, $maxLat])
+                            ->whereBetween('lon', [$minLon, $maxLon]);
+                } else {
+                    // Se non sono disponibili le coordinate geografiche, impostare una condizione falsa per non restituire risultati
+                    $apartments->where('visible', '=', 0);
+                }
+            }
         }
 
-        if($request->filled('rooms')){
+        if ($request->filled('rooms')) {
             $apartments->where('rooms', '>=', $request->input('rooms'));
         }
 
-        if($request->filled('beds')){
+        if ($request->filled('beds')) {
             $apartments->where('beds', '>=', $request->input('beds'));
         }
 
-        if($request->filled('bathrooms')){
+        if ($request->filled('bathrooms')) {
             $apartments->where('bathrooms', '>=', $request->input('bathrooms'));
         }
 
         if ($request->filled('services')) {
-            $services = $request->input('services');
-
-            $services = explode(',', $services);
-        
+            $services = explode(',', $request->input('services'));
             foreach ($services as $service) {
                 $apartments->whereHas('services', function ($query) use ($service) {
                     $query->where('name', $service);
                 });
             }
-        }        
+        }
 
+        // Filtra solo gli appartamenti visibili
         $apartments->where('visible', '=', 1);
+
+        // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
 
         return response()->json($filteredApartments->load(['user', 'images']));
     }
+
 
     public function recordView(Apartment $apartment, Request $request){
         $userIP = $request->ip();
