@@ -80,15 +80,15 @@ class ApartmentController extends Controller
         }
 
         if($request->filled('rooms')){
-            $apartments->where('rooms', '=', $request->input('rooms'));
+            $apartments->where('rooms', '>=', $request->input('rooms'));
         }
 
         if($request->filled('beds')){
-            $apartments->where('beds', '=', $request->input('beds'));
+            $apartments->where('beds', '>=', $request->input('beds'));
         }
 
         if($request->filled('bathrooms')){
-            $apartments->where('bathrooms', '=', $request->input('bathrooms'));
+            $apartments->where('bathrooms', '>=', $request->input('bathrooms'));
         }
 
         if($request->filled('services')){
