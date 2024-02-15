@@ -91,13 +91,15 @@ class ApartmentController extends Controller
             $apartments->where('bathrooms', '>=', $request->input('bathrooms'));
         }
 
-        if($request->filled('services')){
+        if ($request->filled('services')) {
             $services = $request->input('services');
 
-            $apartments->whereHas('services', function($query) use ($request){
-                $query->where('name', 'like', '%' . $request->input('services') . '%');
+            $services = explode(',', $services);
+        
+            $apartments->whereHas('services', function ($query) use ($services) {
+                $query->whereIn('name', $services);
             });
-        }
+        }        
 
         $apartments->where('visible', '=', 1);
         $filteredApartments = $apartments->get();
