@@ -92,6 +92,12 @@ class ApartmentController extends Controller
         }
 
         if($request->filled('services')){
+            $services = $request->input('services');
+
+            if(!is_array($services)){
+                $services = [$services];
+            }
+
             $apartments->whereHas('services', function($query) use ($request){
                 $query->whereIn('name', $request->input('services'));
             });
