@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <section class="container">
-        <h1 class="my-4 text-danger">Apartments List</h1>
+        <h1 class="my-4 text-primary">Apartments List</h1>
 
-        <a href="{{ route('admin.apartments.create') }}" class="btn btn-danger mb-4">Add Apartment</a>
+        <a href="{{ route('admin.apartments.create') }}" class="btn btn-primary mb-4">Add Apartment</a>
 
         @if(session()->has('message'))
             <div class="alert alert-success mt-4">{{ session()->get('message') }}</div>
