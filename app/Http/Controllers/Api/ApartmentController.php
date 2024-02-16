@@ -44,10 +44,7 @@ class ApartmentController extends Controller
                 $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
                 $body = json_decode($response->getBody(), true);
 
-                $found = false;
-                $i = 0;
-
-                while(!$found && $i < 10){
+                for($i = 0; $i < 10; $i++) {
                     if (isset($body['results'][$i]['position']['lat']) && isset($body['results'][$i]['position']['lon'])) {
                         $latC = $body['results'][$i]['position']['lat'];
                         $lonC = $body['results'][$i]['position']['lon'];
@@ -64,9 +61,8 @@ class ApartmentController extends Controller
                             ->whereBetween('lon', [$minLon, $maxLon])->exists();
 
                         if ($risultati) {
-                            $found = true;
-                        } else {
-                            $i++;
+                            $apartments->whereBetween('lat', [$minLat, $maxLat])
+                                ->whereBetween('lon', [$minLon, $maxLon]);
                         }
                         
                     } else {
