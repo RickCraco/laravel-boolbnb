@@ -15,7 +15,7 @@
         @csrf
         <div class="mb-3">
             <label class="text-white" for="title">Title</label>
-            <input type="text" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
+            <input type="text" value="{{ old('title') }}" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200">
             @error('title')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -27,7 +27,7 @@
             <label class="text-white" for="rooms">Rooms</label>
             <br>
             <div class="d-flex align-items-center">
-                <input type="number" class="@error('rooms') is-invalid @enderror form-control w-50" name="rooms" id="rooms" min="1" required>
+                <input type="number" value="{{ old('rooms') }}" class="@error('rooms') is-invalid @enderror form-control w-50" name="rooms" id="rooms" min="1" required>
             </div>
             @error('rooms')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -38,7 +38,7 @@
             <label class="text-white" for="beds">Beds</label>
             <br>
             <div class="d-flex align-items-center">
-                <input type="number" class="@error('beds') is-invalid @enderror form-control w-50" name="beds" id="beds" min="1" required>
+                <input type="number" value="{{ old('beds') }}" class="@error('beds') is-invalid @enderror form-control w-50" name="beds" id="beds" min="1" required>
             </div>
             @error('beds')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -49,7 +49,7 @@
             <label class="text-white" for="bathrooms">Bathrooms</label>
             <br>
             <div class="d-flex align-items-center">
-                <input type="number" class="@error('bathrooms') is-invalid @enderror form-control w-50" name="bathrooms" id="bathrooms" min="1" required>
+                <input type="number" value="{{ old('bathrooms') }}" class="@error('bathrooms') is-invalid @enderror form-control w-50" name="bathrooms" id="bathrooms" min="1" required>
             </div>
             @error('bathrooms')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -59,7 +59,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="square_meters">Square Meters</label>
-        <input type="number" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1" required>
+        <input type="number" value="{{ old('square_meters') }}" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1" required>
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -68,7 +68,7 @@
     <div class="mb-3">
         <label class="text-white" for="address">Address</label>
         <div>
-            <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList" required>
+            <input type="text" value="{{ old('address') }}" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList" required>
             <datalist id="addressList" class="autocomplete"></datalist>
         </div>
         @error('address')
@@ -115,11 +115,11 @@
                 @foreach ($services as $service)
                     <div class="form-check @error('services') is-invalid @enderror">
                         @if ($errors->any())
-                            <input type="checkbox" class="  form-check-input" name="services[]"
-                                value="{{ $service->id }}">
+                            <input type="checkbox" class="form-check-input" name="services[]"
+                                value="{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
                         @else
-                            <input type="checkbox" class="p-0 form-check-input" name="services[]"
-                                value="{{ $service->id }}">
+                            <input type="checkbox" class="form-check-input" name="services[]"
+                                value="{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
                         @endif
                         <label class="form-check-label text-white">
                         {{ $service->name }} <i class="{{ $service->icon }}"></i>
