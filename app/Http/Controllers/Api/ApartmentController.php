@@ -36,41 +36,40 @@ class ApartmentController extends Controller
 
         if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            if (!isset($searchTerm)) {
-                // Se il termine di ricerca non è stato impostato, non è possibile eseguire la ricerca geografica
-                $apartments->where('visible', '=', 0); // Imposta una condizione falsa per non restituire risultati
-            } else {
-                $client = new Client(['verify' => false]);
-                $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
-                $body = json_decode($response->getBody(), true);
+            $hasResults = false;
 
-                for($i = 0; $i < 10; $i++) {
-                    if (isset($body['results'][$i]['position']['lat']) && isset($body['results'][$i]['position']['lon'])) {
-                        $latC = $body['results'][$i]['position']['lat'];
-                        $lonC = $body['results'][$i]['position']['lon'];
+            $client = new Client(['verify' => false]);
+            $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
+            $body = json_decode($response->getBody(), true);
 
-                        $distLat = $radius / 110.574;
-                        $distLon = $radius / 111.320 * cos(deg2rad($latC));
+            for($i = 0; $i < 10; $i++) {
+                if (isset($body['results'][$i]['position']['lat']) && isset($body['results'][$i]['position']['lon'])) {
+                    $latC = $body['results'][$i]['position']['lat'];
+                    $lonC = $body['results'][$i]['position']['lon'];
 
-                        $minLat = $latC - $distLat;
-                        $maxLat = $latC + $distLat;
-                        $minLon = $lonC - $distLon;
-                        $maxLon = $lonC + $distLon;
-                        
-                        $risultati = $apartments->whereBetween('lat', [$minLat, $maxLat])
-                            ->whereBetween('lon', [$minLon, $maxLon])->exists();
+                    $distLat = $radius / 110.574;
+                    $distLon = $radius / (111.320 * cos(deg2rad($latC)));
 
-                        if ($risultati) {
-                            $apartments->whereBetween('lat', [$minLat, $maxLat])
+                    $minLat = $latC - $distLat;
+                    $maxLat = $latC + $distLat;
+                    $minLon = $lonC - $distLon;
+                    $maxLon = $lonC + $distLon;
+                    
+                    $results = $apartments->whereBetween('lat', [$minLat, $maxLat])
+                                        ->whereBetween('lon', [$minLon, $maxLon])
+                                        ->exists();
+
+                    if ($results) {
+                        $apartments->whereBetween('lat', [$minLat, $maxLat])
                                 ->whereBetween('lon', [$minLon, $maxLon]);
-                            break;
-                        }
-                        
-                    } else {
-                        // Se non sono disponibili le coordinate geografiche, impostare una condizione falsa per non restituire risultati
-                        $apartments->where('visible', '=', 0);
+                        $hasResults = true;
+                        break;
                     }
                 }
+            }
+
+            if (!$hasResults) {
+                $apartments->where('id', '=', 0); // Condizione falsa
             }
         }
 
@@ -103,6 +102,7 @@ class ApartmentController extends Controller
 
         return response()->json($filteredApartments->load(['user', 'images']));
     }
+
 
 
     public function recordView(Apartment $apartment, Request $request){
