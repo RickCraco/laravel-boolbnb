@@ -141,7 +141,7 @@
 <script>
     document.getElementById('address').addEventListener('input', function() {
         const input = this.value.trim();
-        if (input.length > 0) {
+        if (input.length >= 4) {
             const datalist = document.getElementById('addressList');
             datalist.innerHTML = ''; // Pulisce le opzioni precedenti
             fetch('https://api.tomtom.com/search/2/search/' + input + '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs')
