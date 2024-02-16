@@ -63,6 +63,7 @@ class ApartmentController extends Controller
                         if ($risultati) {
                             $apartments->whereBetween('lat', [$minLat, $maxLat])
                                 ->whereBetween('lon', [$minLon, $maxLon]);
+                            break;
                         }
                         
                     } else {
