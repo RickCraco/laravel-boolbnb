@@ -22,7 +22,7 @@ class StoreApartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=> 'required|min:5|max:255|unique:apartments,title',
+            'title'=> 'required|min:5|max:255',
             'beds'=> 'required|integer',
             'rooms'=> 'required|integer',
             'bathrooms'=> 'required|integer',
@@ -43,7 +43,6 @@ class StoreApartmentRequest extends FormRequest
             'title.required' => 'Il titolo è obbligatorio',
             'title.min' => 'Il titolo deve avere almeno :min caratteri',
             'title.max' => 'Il titolo deve avere al massimo :max caratteri',
-            'title.unique' => 'esiste già un appartamento con questo nome',
             'rooms.required' => 'Il numero di stanze è obbligatorio',
             'rooms.integer' => 'Il numero di stanze deve essere un numero intero',
             'bathrooms.required' => 'Il numero di bagni è obbligatorio',
