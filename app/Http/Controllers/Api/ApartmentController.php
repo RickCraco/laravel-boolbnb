@@ -44,23 +44,35 @@ class ApartmentController extends Controller
                 $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
                 $body = json_decode($response->getBody(), true);
 
-                if (isset($body['results'][0]['position']['lat']) && isset($body['results'][0]['position']['lon'])) {
-                    $latC = $body['results'][0]['position']['lat'];
-                    $lonC = $body['results'][0]['position']['lon'];
+                $found = false;
+                $i = 0;
 
-                    $distLat = $radius / 110.574;
-                    $distLon = $radius / 111.320 * cos(deg2rad($latC));
+                while(!$found && $i < 10){
+                    if (isset($body['results'][$i]['position']['lat']) && isset($body['results'][$i]['position']['lon'])) {
+                        $latC = $body['results'][$i]['position']['lat'];
+                        $lonC = $body['results'][$i]['position']['lon'];
 
-                    $minLat = $latC - $distLat;
-                    $maxLat = $latC + $distLat;
-                    $minLon = $lonC - $distLon;
-                    $maxLon = $lonC + $distLon;
+                        $distLat = $radius / 110.574;
+                        $distLon = $radius / 111.320 * cos(deg2rad($latC));
 
-                    $apartments->whereBetween('lat', [$minLat, $maxLat])
-                            ->whereBetween('lon', [$minLon, $maxLon]);
-                } else {
-                    // Se non sono disponibili le coordinate geografiche, impostare una condizione falsa per non restituire risultati
-                    $apartments->where('visible', '=', 0);
+                        $minLat = $latC - $distLat;
+                        $maxLat = $latC + $distLat;
+                        $minLon = $lonC - $distLon;
+                        $maxLon = $lonC + $distLon;
+                        
+                        $risultati = $apartments->whereBetween('lat', [$minLat, $maxLat])
+                            ->whereBetween('lon', [$minLon, $maxLon])->exists();
+
+                        if ($risultati) {
+                            $found = true;
+                        } else {
+                            $i++;
+                        }
+                        
+                    } else {
+                        // Se non sono disponibili le coordinate geografiche, impostare una condizione falsa per non restituire risultati
+                        $apartments->where('visible', '=', 0);
+                    }
                 }
             }
         }
