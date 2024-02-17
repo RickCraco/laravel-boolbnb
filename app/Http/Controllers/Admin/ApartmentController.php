@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 class ApartmentController extends Controller
@@ -84,7 +86,13 @@ class ApartmentController extends Controller
     public function show(Apartment $apartment)
     {
         if($apartment->user_id == Auth::id()){
-            return view('admin.apartments.show', compact('apartment'));
+
+            $visuals = $apartment->visual()->selectRaw('MONTHNAME(created_at) as month, COUNT(*) as count')
+            ->whereYear('created_at', now()->year)
+            ->groupByRaw('MONTHNAME(created_at)')
+            ->get();        
+
+            return view('admin.apartments.show', compact('apartment', 'visuals'));
         }else{
             abort(403);
         }
