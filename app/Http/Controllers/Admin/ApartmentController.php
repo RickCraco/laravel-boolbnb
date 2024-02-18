@@ -106,6 +106,10 @@ class ApartmentController extends Controller
      */
     public function payment(Request $request, Apartment $apartment){
 
+        if($apartment->user_id != Auth::id()){
+            abort(403);
+        }
+
         $gateway = new Gateway([
             'environment' => env('BRAINTREE_ENV'),
             'merchantId' => env('BRAINTREE_MERCHANT_ID'),
@@ -121,6 +125,10 @@ class ApartmentController extends Controller
     }
 
     public function process(Request $request, Apartment $apartment){
+
+        if($apartment->user_id != Auth::id()){
+            abort(403);
+        }
         
         $sponsorId = $request->input('sponsor_id');
         $sponsor = Sponsor::findOrFail($sponsorId);
