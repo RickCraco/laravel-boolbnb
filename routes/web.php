@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])->name('admin.')->prefix('admin')->group(
     Route::resource('apartments', ApartmentController::class)->parameters([
         'apartments' => 'apartment:slug'
     ]);
+    Route::get('apartments/{apartment:slug}/payment', [ApartmentController::class, 'payment'])->name('apartments.payment');
+    Route::post('apartments/{apartment:slug}/payment/process', [ApartmentController::class, 'process'])->name('apartments.process');
 });
 
 

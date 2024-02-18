@@ -15,7 +15,8 @@ use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use Braintree\Gateway;
+use App\Models\Sponsor;
 
 class ApartmentController extends Controller
 {
@@ -91,22 +92,64 @@ class ApartmentController extends Controller
             ->whereYear('created_at', now()->year)
             ->groupByRaw('MONTHNAME(created_at)')
             ->get();        
+            
+            $sponsors = Sponsor::all();
 
-            return view('admin.apartments.show', compact('apartment', 'visuals'));
+            return view('admin.apartments.show', compact('apartment', 'visuals', 'sponsors'));
         }else{
             abort(403);
         }
     }
 
     /**
-     * Controls the sponsoring of the specified resource.
+     * Show the form for payment.
      */
-    /*
-     public function sponsorship(Request $request, Apartment $apartment){
-         if($request->has('sponsor')){
-             $apartment->sponsors()->attach($request->sponsor);
-         }
-     } */
+    public function payment(Request $request, Apartment $apartment){
+
+        $gateway = new Gateway([
+            'environment' => env('BRAINTREE_ENV'),
+            'merchantId' => env('BRAINTREE_MERCHANT_ID'),
+            'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
+            'privateKey' => env('BRAINTREE_PRIVATE_KEY'),
+        ]);
+
+        $sponsorId = $request->query('sponsor_id');
+        $sponsor = Sponsor::find($sponsorId);
+
+        $clientToken = $gateway->ClientToken()->generate();
+        return view('admin.apartments.payment', compact('apartment', 'sponsor', 'clientToken'));
+    }
+
+    public function process(Request $request, Apartment $apartment){
+        
+        $sponsorId = $request->input('sponsor_id');
+        $sponsor = Sponsor::findOrFail($sponsorId);
+
+        $gateway = new Gateway([
+            'environment' => env('BRAINTREE_ENV'),
+            'merchantId' => env('BRAINTREE_MERCHANT_ID'),
+            'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
+            'privateKey' => env('BRAINTREE_PRIVATE_KEY'),
+        ]);
+
+        if($request->input('nonce') != null){
+            $nonceFromTheClient = $request->input('nonce');
+
+            $gateway->transaction()->sale([
+                'amount' => $sponsor->price,
+                'paymentMethodNonce' => $nonceFromTheClient,
+                'options' => [
+                    'submitForSettlement' => true
+                ]
+            ]);
+
+            $apartment->sponsors()->attach($sponsor->id, ['start_date' => now(), 'end_date' => now()->addDays($sponsor->duration)]);
+            return redirect()->route('admin.apartments.show', $apartment)->with('message', 'Sponsor successfully added!');
+        }else{
+            $clientToken = $gateway->ClientToken()->generate();
+            return view('admin.apartments.payment', compact('apartment', 'sponsor', 'clientToken'));
+        }
+    }
 
     /**
      * Show the form for editing the specified resource.

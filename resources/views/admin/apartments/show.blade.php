@@ -2,6 +2,11 @@
 @section('content')
     <section class="container my-4">
         <h1 class="text-danger">{{ $apartment->title }}</h1>
+
+        @if(session()->has('message'))
+            <div class="alert alert-success mt-4">{{ session()->get('message') }}</div>
+        @endif
+        
         <div class="card w-50 bg-dark text-white border-white">
             <img src="{{asset('storage/' . $apartment->cover_img) }}" class="card-img-top" alt="{{ $apartment->title }}">
             <div class="card-body">
@@ -15,11 +20,18 @@
             <canvas id="visualsChart" width="800" height="400"></canvas>
         </div>
 
+        <div class="text-white">
+            @foreach($sponsors as $sponsor)
+                <p>{{ $sponsor->name }}</p>
+                <a href="{{ route('admin.apartments.payment', ['apartment' => $apartment, 'sponsor_id' => $sponsor->id]) }}" class="btn btn-primary">Pay now</a>
+            @endforeach
+        </div>
+
     </section>
 
     <script>
-        var ctx = document.getElementById('visualsChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        const ctx = document.getElementById('visualsChart').getContext('2d');
+        const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: {!! json_encode($visuals->pluck('month')) !!},
