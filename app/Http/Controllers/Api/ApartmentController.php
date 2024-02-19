@@ -100,7 +100,7 @@ class ApartmentController extends Controller
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
 
-        return response()->json($filteredApartments->load(['user', 'images']));
+        return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
 
 
