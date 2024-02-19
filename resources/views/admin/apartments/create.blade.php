@@ -101,7 +101,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="visible">Visible</label>
-        <input type="radio" name="visible" id="visible" value="1">
+        <input type="radio" name="visible" id="visible" value="1" required>
         <label class="text-white" for="visible">Not Visible</label>
         <input type="radio" name="visible" id="visible" value="0">
         @error('visible')
@@ -115,10 +115,10 @@
                 @foreach ($services as $service)
                     <div class="form-check @error('services') is-invalid @enderror">
                         @if ($errors->any())
-                            <input type="checkbox" class="form-check-input" name="services[]"
+                            <input type="checkbox" class="form-check-input services" name="services[]"
                                 value="{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
                         @else
-                            <input type="checkbox" class="form-check-input" name="services[]"
+                            <input type="checkbox" class="form-check-input services" name="services[]"
                                 value="{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
                         @endif
                         <label class="form-check-label text-white">
@@ -156,6 +156,32 @@
                 .catch(error => console.error('Si è verificato un errore durante il recupero dei dati:', error));
         }
     });
+
+    function controlServices() {
+        const services = document.querySelectorAll('.services');
+        const submitButton = document.querySelector('.btn-success');
+
+        const oneChecked = Array.from(services).some(function(checkbox) {
+            return checkbox.checked;
+        });
+
+        if (oneChecked) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        controlServices();
+
+        const services = document.querySelectorAll('.services');
+        services.forEach(function(checkbox) {
+            checkbox.addEventListener('change', controlServices);
+        });
+    });
+
+
 </script>
 
 
