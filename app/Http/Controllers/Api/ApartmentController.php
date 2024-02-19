@@ -14,12 +14,12 @@ class ApartmentController extends Controller
     public function index()
     {
         $apartments = Apartment::where('visible','=', 1)->get();
-        return response()->json($apartments->load(['user', 'images']));
+        return response()->json($apartments->load(['user', 'images', 'sponsors']));
     }
 
     public function show(Apartment $apartment)
     {
-        return response()->json($apartment->load(['user', 'images', 'services', 'sponsor']));
+        return response()->json($apartment->load(['user', 'images', 'services', 'sponsors']));
     }
 
     public function search(Request $request)
