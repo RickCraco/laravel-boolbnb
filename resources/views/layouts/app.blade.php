@@ -38,19 +38,12 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{url('/') }}">{{ __('Home') }}</a>
+                            <a class="nav-link text-white" href="{{url('admin') }}">{{ __('Control Panel') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="http://localhost:5174">{{ __('BoolBnB') }}</a>
                         </li>
                     </ul>
-
-                    @auth
-                        <form action="">
-                            @csrf
-                            <input type="text" name="search" id="search" class="form-control" placeholder="Cerca">
-                        </form>
-                    @endauth
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -71,7 +64,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ url('admin') }}">{{__('Dashboard')}}</a>
+                                <a class="dropdown-item" href="{{ url('admin') }}">{{__('Control Panel')}}</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
