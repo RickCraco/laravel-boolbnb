@@ -6,7 +6,7 @@
         @if(session()->has('message'))
             <div class="alert alert-success mt-4">{{ session()->get('message') }}</div>
         @endif
-        
+
         <div class="card w-50 bg-dark text-white border-white">
             <img src="{{asset('storage/' . $apartment->cover_img) }}" class="card-img-top" alt="{{ $apartment->title }}">
             <div class="card-body">
@@ -44,6 +44,7 @@
                 }]
             },
             options: {
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true
