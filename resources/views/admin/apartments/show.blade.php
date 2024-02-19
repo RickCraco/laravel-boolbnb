@@ -1,18 +1,95 @@
 @extends('layouts.app')
 @section('content')
     <section class="container my-4">
-        <h1 class="text-danger">{{ $apartment->title }}</h1>
+        <div class="d-flex gap-4 align-items-center">
+            <h1 class="text-white">{{ $apartment->title }}</h1>
+            <a href="{{ route('admin.apartments.edit', $apartment) }}" class="btn btn-success">Edit</a>
+        </div>
+
 
         @if(session()->has('message'))
             <div class="alert alert-success mt-4">{{ session()->get('message') }}</div>
         @endif
 
-        <div class="card w-50 bg-dark text-white border-white">
-            <img src="{{asset('storage/' . $apartment->cover_img) }}" class="card-img-top" alt="{{ $apartment->title }}">
-            <div class="card-body">
-                <h5 class="card-title">{{ $apartment->title }}</h5>
-                <a href="{{ route('admin.apartments.edit', $apartment) }}" class="btn btn-danger">Edit</a>
+        <div class="text-white row mt-3">
+            <div class="col-6">
+                <img src="{{asset('storage/' . $apartment->cover_img) }}" class="card-img-top w-100 rounded-4" alt="{{ $apartment->title }}">
             </div>
+            <div class="col-6">
+                <div>
+                    <p><i class="fa-solid fs-4 fa-location-dot me-3"></i> {{ $apartment->address }} ({{ $apartment->lat }}, {{ $apartment->lon }})</p>
+                </div>
+                <div class="d-flex gap-5 mt-5">
+                    <p><i class="fa-solid fs-4 fa-couch"></i> {{ $apartment->rooms }}</p>
+                    <p><i class="fa-solid fs-4 fa-bed"></i> {{ $apartment->beds }}</p>
+                    <p><i class="fa-solid fs-4 fa-shower"></i> {{ $apartment->bathrooms }}</p>
+                </div>
+                <div class="mt-3">
+                    <h2 class="mb-3">Services:</h2>
+                    <ul class="list-unstyled d-flex flex-wrap">
+                        @foreach ($apartment->services as $item)
+                            <li class="fs-4 col-12 col-md-6 col-lg-4 my-2"><i class="{{ $item->icon }} me-2"></i>{{ $item->name }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p class="d-inline-flex gap-1 mt-4">
+                <button class="btn btn-success fs-4 text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  Boost your apartment
+                </button>
+            </p>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <h2 class="text-center pb-3">Our Plans</h2>
+                    <div class="text-white d-flex justify-content-between">
+                        @foreach($sponsors as $sponsor)
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ $sponsor->name }}</h5>
+                              <h6 class="card-subtitle mb-2 text-body-secondary">Price: {{ $sponsor->price }}$</h6>
+                              <p class="card-text">Duration: {{ $sponsor->duration }} @if($sponsor->duration > 1)Days @else Day @endif</p>
+                              <a href="{{ route('admin.apartments.payment', ['apartment' => $apartment, 'sponsor_id' => $sponsor->id]) }}" class="btn btn-success">Pay now</a>
+                            </div>
+                          </div>
+                        @endforeach
+                    </div>
+                </div>
+              </div>
+            <div>
+        </div>
+
+            <div class="accordion my-5" id="accordionExample">
+                <h2 class="text-white">Your Inbox</h2>
+                @if ($apartment->messages->count() > 0)
+                    @foreach ($apartment->messages as $item)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            {{ $item->email }}
+                          </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <p class="fs-5">Name: <span class="fw-bold">{{ $item->name }}</span></p>
+                            <p class="fs-5">Surname: <span class="fw-bold">{{ $item->surname }}</span></p>
+                            @if($item->phone_number)
+                                <p class="fs-5">Phone Number: <span class="fw-bold">{{ $item->phone_number }}</span></p>
+                            @endif
+                            <h4>Message:</h4>
+                            <p>{{ $item->body }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    @endforeach
+                @else
+                    <h4 class="text-white">Your inbox is empty :(</h4>
+                @endif
+
+            </div>
+
         </div>
 
         <div class="my-4">
@@ -20,12 +97,7 @@
             <canvas id="visualsChart" width="800" height="400"></canvas>
         </div>
 
-        <div class="text-white">
-            @foreach($sponsors as $sponsor)
-                <p>{{ $sponsor->name }}</p>
-                <a href="{{ route('admin.apartments.payment', ['apartment' => $apartment, 'sponsor_id' => $sponsor->id]) }}" class="btn btn-primary">Pay now</a>
-            @endforeach
-        </div>
+
 
     </section>
 

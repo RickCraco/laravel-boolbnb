@@ -9,6 +9,21 @@ $fa-font-path: "../fonts/webfonts" !default;
 
 @import '~bootstrap/scss/bootstrap';
 
-h1 {
-    color: $text-color;
+.text-rich-black {
+    color: var(--rich-black);
+}
+.bg-rich-black {
+    background-color: var(--rich-black);
+}
+.text-prussian-blue {
+    color: var(--prussian-blue);
+}
+.bg-prussian-blue {
+    background-color: var(--prussian-blue);
+}
+.text-cerulean {
+    color: var(--cerulean);
+}
+.bg-cerulean {
+    background-color: var(--cerulean);
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-    <section class="container mb-3">
-        <h1>Create Apartment</h1>
+    <section class="container my-5">
+        <h1 class="text-white">Create Apartment</h1>
         @if ($errors->any())
             <div class="alert  alert-danger">
                 <ul>
@@ -84,7 +84,7 @@
 
     <div class="mb-3">
         <label class="text-white" for="cover_img">Preview Image</label>
-        <input type="file" class="form-control w-25 @error('cover_img') is-invalid @enderror" name="cover_img" id="cover_img">
+        <input type="file" class="form-control w-50 @error('cover_img') is-invalid @enderror" name="cover_img" id="cover_img">
         @error('cover_img')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -93,7 +93,7 @@
     <div class="mb-3">
         <label class="text-white" for="images">Images</label>
         <br>
-        <input type="file" class="form-control w-25 @error('images') is-invalid @enderror" name="images[]" id="images" multiple>
+        <input type="file" class="form-control w-50 @error('images') is-invalid @enderror" name="images[]" id="images" multiple>
         @error('images')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

@@ -22,15 +22,15 @@
     @vite(['resources/js/app.js'])
 </head>
 
-<body class="bg-dark">
+<body class="bg-prussian-blue">
     <div id="app">
 
 
-        <nav class="navbar navbar-expand-md navbar-light shadow-sm bg-dark">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm bg-rich-black">
             <div class="container">
 
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -81,7 +81,7 @@
             </div>
         </nav>
 
-        <main class="">
+        <main>
             @yield('content')
         </main>
     </div>
