@@ -36,40 +36,33 @@ class ApartmentController extends Controller
 
         if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            $hasResults = false;
-
+            $searchTerm = $request->input('search'); // Aggiungi questa riga
             $client = new Client(['verify' => false]);
             $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
             $body = json_decode($response->getBody(), true);
 
-            for($i = 0; $i < 10; $i++) {
-                if (isset($body['results'][$i]['position']['lat']) && isset($body['results'][$i]['position']['lon'])) {
-                    $latC = $body['results'][$i]['position']['lat'];
-                    $lonC = $body['results'][$i]['position']['lon'];
+            $resultsFound = false;
+            foreach($body['results'] as $result) {
+                $latC = $result['position']['lat'];
+                $lonC = $result['position']['lon'];
 
-                    $distLat = $radius / 110.574;
-                    $distLon = $radius / (111.320 * cos(deg2rad($latC)));
+                $distLat = $radius / 110.574;
+                $distLon = $radius / (111.320 * cos(deg2rad($latC)));
 
-                    $minLat = $latC - $distLat;
-                    $maxLat = $latC + $distLat;
-                    $minLon = $lonC - $distLon;
-                    $maxLon = $lonC + $distLon;
-                    
-                    $results = $apartments->orWhereBetween('lat', [$minLat, $maxLat])
-                                        ->whereBetween('lon', [$minLon, $maxLon])
-                                        ->exists();
+                $minLat = $latC - $distLat;
+                $maxLat = $latC + $distLat;
+                $minLon = $lonC - $distLon;
+                $maxLon = $lonC + $distLon;
+                
+                $apartments->orWhereBetween('lat', [$minLat, $maxLat])
+                            ->whereBetween('lon', [$minLon, $maxLon]);
 
-                    if ($results) {
-                        $apartments->orWhereBetween('lat', [$minLat, $maxLat])
-                                ->whereBetween('lon', [$minLon, $maxLon]);
-                        $hasResults = true;
-                        break;
-                    }
-                }
+                $resultsFound = true;
             }
 
-            if (!$hasResults) {
-                $apartments->where('id', '=', 0); // Condizione falsa
+            // Se non trovi risultati, aggiungi una clausola falsa per evitare di restituire tutto
+            if (!$resultsFound) {
+                $apartments->where('id', '=', 0);
             }
         }
 
@@ -102,6 +95,7 @@ class ApartmentController extends Controller
 
         return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
+
 
 
 
