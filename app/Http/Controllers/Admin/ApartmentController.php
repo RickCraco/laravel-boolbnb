@@ -26,6 +26,14 @@ class ApartmentController extends Controller
     public function index()
     {
         $apartments = Apartment::where('user_id', auth()->user()->id)->get();
+
+        foreach($apartments as $apartment){
+            $expiredSponsors = $apartment->sponsors()->where('end_date', '<', now())->get();
+            foreach($expiredSponsors as $sponsor){
+                $apartment->sponsors()->detach($sponsor->id);
+            }
+        }
+
         return view('admin.apartments.index', compact('apartments'));
     }
 
