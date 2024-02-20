@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ApartmentController;
+use App\Http\Controllers\Admin\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,7 @@ Route::middleware(['auth', 'verified'])->name('admin.')->prefix('admin')->group(
     ]);
     Route::get('apartments/{apartment:slug}/payment', [ApartmentController::class, 'payment'])->name('apartments.payment');
     Route::post('apartments/{apartment:slug}/payment/process', [ApartmentController::class, 'process'])->name('apartments.process');
+    Route::get('apartments/messages/{message}', [MessageController::class, 'show'])->name('messages.show');
 });
 
 
