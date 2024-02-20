@@ -37,6 +37,10 @@
                         @endforeach
                     </ul>
                 </div>
+                <div class="mt-3">
+                    <h2 class="mb-3">Sponsorship expire date:</h2>
+                    <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
+                </div>
             </div>
         </div>
 
@@ -80,7 +84,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($apartment->messages as $item)
+                    @foreach ($apartment->messages->sortBy('created_at') as $item)
                         <tr>
                             <th class="text-center" scope="row">{{ $item->id }}</th>
                             <td class="text-center">{{ $item->email }}</td>
