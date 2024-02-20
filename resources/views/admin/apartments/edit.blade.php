@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section class="container my-4">
-        <h1 class="text-white">Edit {{$apartment->title}}</h1>
+        <h1 class="text-white">Edit {{$apartment->title}} <span class="fs-6 ms-3 text-danger"> Fields marked with * are required!</span></h1>
         @if ($errors->any())
             <div class="alert  alert-danger">
                 <ul>
@@ -15,7 +15,7 @@
         @csrf
         @method('PUT')
      <div class="mb-3">
-            <label class="text-white" for="title">Title</label>
+            <label class="text-white" for="title">Title *</label>
             <input type="text" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200" value="{{ old('title', $apartment->title) }}">
             @error('title')
@@ -25,7 +25,7 @@
 
     <div class="mb-3 d-flex">
         <div class="">
-            <label class="text-white" for="rooms">Rooms</label>
+            <label class="text-white" for="rooms">Rooms *</label>
             <input type="number" min="1" class="form-control w-50 @error('rooms') is-invalid @enderror" name="rooms" id="rooms" value="{{ old('rooms', $apartment->rooms) }}" required>
             @error('rooms')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -33,7 +33,7 @@
         </div>
 
         <div class="">
-            <label class="text-white" for="beds">Beds</label>
+            <label class="text-white" for="beds">Beds *</label>
             <input type="number" min="1" class="form-control w-50 @error('beds') is-invalid @enderror" name="beds" id="beds" value="{{ old('beds', $apartment->beds) }}" required>
             @error('beds')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="">
-            <label class="text-white" for="bathrooms">Bathrooms</label>
+            <label class="text-white" for="bathrooms">Bathrooms *</label>
             <input type="number" min="1" class="form-control w-50 @error('bathrooms') is-invalid @enderror" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}" required>
             @error('bathrooms')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="text-white" for="square_meters">Square Meters</label>
+        <label class="text-white" for="square_meters">Square Meters *</label>
         <input type="number" min="1" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" value="{{ old('square_meters', $apartment->square_meters) }}">
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="text-white" for="address">Address</label>
+        <label class="text-white" for="address">Address *</label>
         <input type="text" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" value="{{ old('address', $apartment->address) }}" list="addressList">
         <datalist id="addressList" class="autocomplete"></datalist>
         @error('address')
@@ -89,6 +89,7 @@
     </div>
 
     <div class="mb-3">
+        <p class="text-white">Visibility *</p>
         <label class="text-white" for="visible">Visible</label>
         <input type="radio" name="visible" id="visible" value="1" {{ old('visible', $apartment->visible) ? 'checked' : '' }}>
         <label class="text-white" for="visible">Not Visible</label>
@@ -99,7 +100,7 @@
     </div>
 
     <div class="mb-3">
-        <h6 class="text-white">Services:</h6>
+        <h6 class="text-white">Services *</h6>
             <div class="form-group d-flex flex-wrap gap-3">
                 @foreach ($services as $service)
                     <div class="form-check @error('services') is-invalid @enderror">

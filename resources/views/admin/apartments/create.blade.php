@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section class="container my-5">
-        <h1 class="text-white">Create Apartment</h1>
+        <h1 class="text-white">Create Apartment <span class="fs-6 ms-3 text-danger"> Fields marked with * are required!</span></h1>
         @if ($errors->any())
             <div class="alert  alert-danger">
                 <ul>
@@ -14,7 +14,7 @@
         <form action="{{ route('admin.apartments.store') }}"  method="POST" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="mb-3">
-            <label class="text-white" for="title">Title</label>
+            <label class="text-white" for="title">Title *</label>
             <input type="text" value="{{ old('title') }}" class="form-control w-50 @error('title') is-invalid @enderror" name="title" id="title"
                 required minlength="3" maxlength="200">
             @error('title')
@@ -24,7 +24,7 @@
 
     <div class="mb-3 d-flex">
         <div>
-            <label class="text-white" for="rooms">Rooms</label>
+            <label class="text-white" for="rooms">Rooms *</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" value="{{ old('rooms') }}" class="@error('rooms') is-invalid @enderror form-control w-50" name="rooms" id="rooms" min="1" required>
@@ -35,7 +35,7 @@
         </div>
 
         <div>
-            <label class="text-white" for="beds">Beds</label>
+            <label class="text-white" for="beds">Beds *</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" value="{{ old('beds') }}" class="@error('beds') is-invalid @enderror form-control w-50" name="beds" id="beds" min="1" required>
@@ -46,7 +46,7 @@
         </div>
 
         <div>
-            <label class="text-white" for="bathrooms">Bathrooms</label>
+            <label class="text-white" for="bathrooms">Bathrooms *</label>
             <br>
             <div class="d-flex align-items-center">
                 <input type="number" value="{{ old('bathrooms') }}" class="@error('bathrooms') is-invalid @enderror form-control w-50" name="bathrooms" id="bathrooms" min="1" required>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="text-white" for="square_meters">Square Meters</label>
+        <label class="text-white" for="square_meters">Square Meters *</label>
         <input type="number" value="{{ old('square_meters') }}" class="form-control w-25 @error('square_meters') is-invalid @enderror" name="square_meters" id="square_meters" min="1" required>
         @error('square_meters')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -66,7 +66,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="text-white" for="address">Address</label>
+        <label class="text-white" for="address">Address *</label>
         <div>
             <input type="text" value="{{ old('address') }}" class="form-control w-50 @error('address') is-invalid @enderror" name="address" id="address" placeholder="Street | House Number | Postal Code | City" list="addressList" required>
             <datalist id="addressList" class="autocomplete"></datalist>
@@ -100,6 +100,7 @@
     </div>
 
     <div class="mb-3">
+        <p class="text-white">Visibility *</p>
         <label class="text-white" for="visible">Visible</label>
         <input type="radio" name="visible" id="visible" value="1" required>
         <label class="text-white" for="visible">Not Visible</label>
@@ -110,7 +111,7 @@
     </div>
 
     <div class="mb-3">
-        <h6 class="text-white">Services:</h6>
+        <h6 class="text-white">Services *</h6>
             <div class="form-group d-flex flex-wrap gap-3">
                 @foreach ($services as $service)
                     <div class="form-check @error('services') is-invalid @enderror">

@@ -3,6 +3,11 @@
     <section class="container my-4">
         <div class="d-flex gap-4 align-items-center">
             <h1 class="text-white">{{ $apartment->title }}</h1>
+            @if($apartment->sponsors()->count() > 0)
+                <div>
+                    <span class="badge rounded-pill text-bg-warning text-uppercase"><i class="fa-solid fa-crown"></i> premium</span>
+                </div>
+            @endif
             <a href="{{ route('admin.apartments.edit', $apartment) }}" class="btn btn-success">Edit</a>
         </div>
 
@@ -64,26 +69,28 @@
             <div class="accordion my-5" id="accordionExample">
                 <h2 class="text-white">Your Inbox</h2>
                 @if ($apartment->messages->count() > 0)
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="text-center" scope="col">ID</th>
+                        <th class="text-center" scope="col">Email</th>
+                        <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Date</th>
+                        <th class="text-center" scope="col"><i class="fa-solid fa-gear"></i></th>
+                      </tr>
+                    </thead>
+                    <tbody>
                     @foreach ($apartment->messages as $item)
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            {{ $item->email }}
-                          </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <p class="fs-5">Name: <span class="fw-bold">{{ $item->name }}</span></p>
-                            <p class="fs-5">Surname: <span class="fw-bold">{{ $item->surname }}</span></p>
-                            @if($item->phone_number)
-                                <p class="fs-5">Phone Number: <span class="fw-bold">{{ $item->phone_number }}</span></p>
-                            @endif
-                            <h4>Message:</h4>
-                            <p>{{ $item->body }}</p>
-                          </div>
-                        </div>
-                      </div>
+                        <tr>
+                            <th class="text-center" scope="row">{{ $item->id }}</th>
+                            <td class="text-center">{{ $item->email }}</td>
+                            <td class="text-center">{{ $item->name }}</td>
+                            <td class="text-center">{{ $item->created_at }}</td>
+                            <td class="text-center"><a href="#" class="btn btn-success"><i class="fa-solid fa-eye"></i></a></td>
+                        </tr>
                     @endforeach
+                    </tbody>
+                  </table>
                 @else
                     <h4 class="text-white">Your inbox is empty :(</h4>
                 @endif
