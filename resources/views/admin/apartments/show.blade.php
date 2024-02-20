@@ -86,7 +86,7 @@
                             <td class="text-center">{{ $item->email }}</td>
                             <td class="text-center">{{ $item->name }}</td>
                             <td class="text-center">{{ $item->created_at }}</td>
-                            <td class="text-center"><a href="#" class="btn btn-success"><i class="fa-solid fa-eye"></i></a></td>
+                            <td class="text-center"><a href="#" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
                         </tr>
                     @endforeach
                     </tbody>
