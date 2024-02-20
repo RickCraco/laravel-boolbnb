@@ -37,10 +37,12 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="mt-3">
-                    <h2 class="mb-3">Premium until:</h2>
-                    <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
-                </div>
+                @if($apartment->sponsors->count() > 0)
+                    <div class="mt-3">
+                        <h2 class="mb-3">Premium until:</h2>
+                        <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
+                    </div>
+                @endif
             </div>
         </div>
 
