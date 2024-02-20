@@ -92,7 +92,7 @@
                             <td class="text-center">{{ $item->name }}</td>
                             <td class="text-center">{{ $item->surname }}</td>
                             <td class="text-center">{{ $item->created_at }}</td>
-                            <td class="text-center"><a href="{{ route('admin.messages.show', $item) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
+                            <td class="text-center"><a href="{{ route('admin.messages.show', [$apartment, $item]) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
                         </tr>
                     @endforeach
                     </tbody>
