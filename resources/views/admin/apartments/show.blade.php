@@ -3,7 +3,7 @@
     <section class="container my-4">
         <div class="d-flex gap-4 align-items-center">
             <h1 class="text-white">{{ $apartment->title }}</h1>
-            @if($apartment->sponsors()->count() > 0)
+            @if($apartment->sponsors->count() > 0)
                 <div>
                     <span class="badge rounded-pill text-bg-warning text-uppercase"><i class="fa-solid fa-crown"></i> premium</span>
                 </div>
@@ -100,7 +100,7 @@
         </div>
 
         <div class="my-4">
-            <h2 class="text-white">Visuals</h2>
+            <h2 class="text-white">Stats</h2>
             <canvas id="visualsChart" width="800" height="400"></canvas>
         </div>
 
@@ -115,7 +115,7 @@
             data: {
                 labels: {!! json_encode($visuals->pluck('month')) !!},
                 datasets: [{
-                    label: 'Visualizzazioni per Mese',
+                    label: 'Visuals per month',
                     data: {!! json_encode($visuals->pluck('count')) !!},
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
