@@ -17,10 +17,10 @@
         @endif
 
         <div class="text-white row mt-3">
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <img src="{{asset('storage/' . $apartment->cover_img) }}" class="card-img-top w-100 rounded-4" alt="{{ $apartment->title }}">
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6 pt-5 pt-md-0">
                 <div>
                     <p><i class="fa-solid fs-4 fa-location-dot me-3"></i> {{ $apartment->address }} ({{ $apartment->lat }}, {{ $apartment->lon }})</p>
                 </div>
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
                 <div class="mt-3">
-                    <h2 class="mb-3">Sponsorship expire date:</h2>
+                    <h2 class="mb-3">Premium until:</h2>
                     <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
                 </div>
             </div>
@@ -76,19 +76,19 @@
                 <table class="table">
                     <thead>
                       <tr>
-                        <th class="text-center" scope="col">ID</th>
                         <th class="text-center" scope="col">Email</th>
                         <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Surname</th>
                         <th class="text-center" scope="col">Date</th>
                         <th class="text-center" scope="col"><i class="fa-solid fa-gear"></i></th>
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($apartment->messages->sortBy('created_at') as $item)
+                    @foreach ($apartment->messages->sortByDesc('created_at') as $item)
                         <tr>
-                            <th class="text-center" scope="row">{{ $item->id }}</th>
-                            <td class="text-center">{{ $item->email }}</td>
+                            <td class="text-center" scope="row">{{ $item->email }}</td>
                             <td class="text-center">{{ $item->name }}</td>
+                            <td class="text-center">{{ $item->surname }}</td>
                             <td class="text-center">{{ $item->created_at }}</td>
                             <td class="text-center"><a href="#" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
                         </tr>
