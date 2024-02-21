@@ -94,7 +94,6 @@ class ApartmentController extends Controller
         }
 
         // Filtra solo gli appartamenti visibili
-
         $apartments->where('visible', '=', 1);
 
         // Esegui la query e restituisci i risultati
