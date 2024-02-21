@@ -99,8 +99,7 @@ class ApartmentController extends Controller
         ->select('apartments.*')
         ->where('apartments.visible', '=', 1)
         ->groupBy('apartments.id')
-        ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END')
-        ->get();
+        ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END');
 
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
