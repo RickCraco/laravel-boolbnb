@@ -54,9 +54,9 @@ class ApartmentController extends Controller
                 $minLon = $lonC - $distLon;
                 $maxLon = $lonC + $distLon;
                 
-                $apartments->orWhereBetween('lat', [$minLat, $maxLat])
-                ->whereBetween('lon', [$minLon, $maxLon])
-                ->where('visible', '=', 1);
+                $apartments->where('visible', '=', 1)
+                ->orWhereBetween('lat', [$minLat, $maxLat])
+                ->whereBetween('lon', [$minLon, $maxLon]);
 
                 $resultsFound = true;
             }
