@@ -93,11 +93,11 @@ class ApartmentController extends Controller
             }
         }
 
-        // Filtra solo gli appartamenti visibili
-        $apartments->where('visible', '=', 1);
+        // Filtra solo gli appartamenti visibili e ordinati per sponsor
 
         $apartments->leftJoin('apartment_sponsor', 'apartments.id', '=', 'apartment_sponsor.apartment_id')
         ->select('apartments.*')
+        ->where('apartments.visible', '=', 1)
         ->groupBy('apartments.id')
         ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END')
         ->get();
