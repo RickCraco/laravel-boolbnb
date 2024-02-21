@@ -98,12 +98,12 @@ class ApartmentController extends Controller
         $apartments->leftJoin('apartment_sponsor', 'apartments.id', '=', 'apartment_sponsor.apartment_id')
         ->select('apartments.*')
         ->where('apartments.visible', '=', 1)
-        ->where('apartment_sponsor.visible', '=', 1) // Aggiungi questa riga
+        ->where('apartment_sponsor.visible', '=', 1)
+        ->where(function($query) {
+            $query->where('visible', '=', 1);
+        })
         ->groupBy('apartments.id')
         ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END');
-
-        // Applica la condizione per gli appartamenti visibili
-        $apartments->where('visible', '=', 1);
 
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
