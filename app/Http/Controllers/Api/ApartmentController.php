@@ -102,6 +102,26 @@ class ApartmentController extends Controller
         ->where(function($query) {
             $query->where('visible', '=', 1);
         })
+        ->where(function($query) use ($radius, $searchTerm) {
+            if ($radius) {
+                // Codice per il filtro del raggio
+                foreach($body['results'] as $result) {
+                    $latC = $result['position']['lat'];
+                    $lonC = $result['position']['lon'];
+
+                    $distLat = $radius / 110.574;
+                    $distLon = $radius / (111.320 * cos(deg2rad($latC)));
+
+                    $minLat = $latC - $distLat;
+                    $maxLat = $latC + $distLat;
+                    $minLon = $lonC - $distLon;
+                    $maxLon = $lonC + $distLon;
+
+                    $query->orWhereBetween('lat', [$minLat, $maxLat])
+                            ->whereBetween('lon', [$minLon, $maxLon]);
+                }
+            }
+        })
         ->groupBy('apartments.id')
         ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END');
 
