@@ -13,9 +13,11 @@ class ApartmentController extends Controller
 {
     public function index()
     {
-        $apartments = Apartment::query();
-        $apartments->where('visible', '=', 1);
-        $apartments->with('sponsors')->orderBy('sponsor_id', 'asc')->get();
+        $apartments = Apartment::with('sponsors')
+        ->where('visible', '=', 1)
+        ->orderByRaw('CASE WHEN sponsors.id IS NULL THEN 1 ELSE 0 END')
+        ->get();
+
         return response()->json($apartments->load(['user', 'images', 'sponsors']));
     }
 
