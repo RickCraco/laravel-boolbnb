@@ -28,6 +28,7 @@ class UpdateApartmentRequest extends FormRequest
             'bathrooms'=> 'required|integer',
             'square_meters'=> 'required|integer',
             'address'=> 'required|min:5',
+            'desc' => 'nullable|max:5000',
             'cover_img'=> 'nullable|image',
             'services'=> 'exists:services,id|required|array|min:1',
             'lat'=> 'nullable',
