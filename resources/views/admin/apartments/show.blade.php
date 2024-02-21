@@ -37,10 +37,12 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="mt-3">
-                    <h2 class="mb-3">Premium until:</h2>
-                    <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
-                </div>
+                @if($apartment->sponsors->count() > 0)
+                    <div class="mt-3">
+                        <h2 class="mb-3">Premium until:</h2>
+                        <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -90,7 +92,7 @@
                             <td class="text-center">{{ $item->name }}</td>
                             <td class="text-center">{{ $item->surname }}</td>
                             <td class="text-center">{{ $item->created_at }}</td>
-                            <td class="text-center"><a href="{{ route('admin.messages.show', $item) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
+                            <td class="text-center"><a href="{{ route('admin.messages.show', [$apartment, $item]) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
                         </tr>
                     @endforeach
                     </tbody>
