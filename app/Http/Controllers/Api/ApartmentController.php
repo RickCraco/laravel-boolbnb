@@ -36,12 +36,12 @@ class ApartmentController extends Controller
 
         if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            $searchTerm = $request->input('search'); // Aggiungi questa riga
+            $searchTerm = $request->input('search');
             $client = new Client(['verify' => false]);
             $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
             $body = json_decode($response->getBody(), true);
 
-            $resultsFound = false;
+            $visibleApartments = collect();
             foreach($body['results'] as $result) {
                 $latC = $result['position']['lat'];
                 $lonC = $result['position']['lon'];
@@ -53,18 +53,18 @@ class ApartmentController extends Controller
                 $maxLat = $latC + $distLat;
                 $minLon = $lonC - $distLon;
                 $maxLon = $lonC + $distLon;
-                
-                $apartments->orWhereBetween('lat', [$minLat, $maxLat])
-                ->whereBetween('lon', [$minLon, $maxLon])
-                ->where('visible', '=', 1);
 
-                $resultsFound = true;
+                // Trova gli appartamenti visibili entro il raggio
+                $visibleApartments = $visibleApartments->merge(
+                    Apartment::whereBetween('lat', [$minLat, $maxLat])
+                        ->whereBetween('lon', [$minLon, $maxLon])
+                        ->where('visible', '=', 1)
+                        ->pluck('id')
+                );
             }
 
-            // Se non trovi risultati, aggiungi una clausola falsa per evitare di restituire tutto
-            if (!$resultsFound) {
-                $apartments->where('id', '=', 0);
-            }
+            // Filtra gli appartamenti in base alla visibilità e alla presenza nei risultati della ricerca del raggio
+            $apartments->whereIn('id', $visibleApartments);
         }
 
         if ($request->filled('rooms')) {
@@ -96,6 +96,7 @@ class ApartmentController extends Controller
 
         return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
+
 
 
 
