@@ -93,37 +93,16 @@ class ApartmentController extends Controller
             }
         }
 
-        // ordinati gli appartamenti per sponsor
+        // Filtra solo gli appartamenti visibili
 
-        $apartments->leftJoin('apartment_sponsor', 'apartments.id', '=', 'apartment_sponsor.apartment_id')
-        ->select('apartments.*')
-        ->where('apartments.visible', '=', 1)
-        ->where('apartment_sponsor.visible', '=', 1)
-        ->where(function($query) {
-            $query->where('visible', '=', 1);
-        })
-        ->where(function($query) use ($radius, $searchTerm) {
-            if ($radius) {
-                // Codice per il filtro del raggio
-                foreach($body['results'] as $result) {
-                    $latC = $result['position']['lat'];
-                    $lonC = $result['position']['lon'];
+        $apartments->where('visible', '=', 1);
 
-                    $distLat = $radius / 110.574;
-                    $distLon = $radius / (111.320 * cos(deg2rad($latC)));
+        $sponsoredApartmentIds = ApartmentSponsor::pluck('apartment_id')->toArray();
 
-                    $minLat = $latC - $distLat;
-                    $maxLat = $latC + $distLat;
-                    $minLon = $lonC - $distLon;
-                    $maxLon = $lonC + $distLon;
-
-                    $query->orWhereBetween('lat', [$minLat, $maxLat])
-                            ->whereBetween('lon', [$minLon, $maxLon]);
-                }
-            }
-        })
-        ->groupBy('apartments.id')
-        ->orderByRaw('CASE WHEN COUNT(apartment_sponsor.sponsor_id) > 0 THEN 0 ELSE 1 END');
+        // Applica l'ordinamento in base agli ID degli appartamenti sponsorizzati
+        $apartments->orderBy(function ($query) use ($sponsoredApartmentIds) {
+            return array_search($query->id, $sponsoredApartmentIds);
+        });
 
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
