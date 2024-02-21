@@ -38,7 +38,7 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Message $message, Apartment $apartment)
+    public function show(Apartment $apartment, Message $message)
     {
         if($apartment->user_id != Auth::id()){
             abort(403);
