@@ -97,10 +97,6 @@ class ApartmentController extends Controller
 
         $apartments->where('visible', '=', 1);
 
-        // Applica l'ordinamento in base agli ID degli appartamenti sponsorizzati
-        $apartments->orderBy(function ($query) {
-            return ApartmentSponsor::whereColumn('apartments.id', '=', 'apartment_sponsor.apartment_id')->count();
-        });
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
 
