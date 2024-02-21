@@ -119,10 +119,10 @@
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: {!! json_encode($visuals->pluck('month')) !!},
+                labels: {!! json_encode($allMonths) !!},
                 datasets: [{
                     label: 'Visuals per month',
-                    data: {!! json_encode($visuals->pluck('count')) !!},
+                    data: {!! json_encode($visuals) !!},
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1

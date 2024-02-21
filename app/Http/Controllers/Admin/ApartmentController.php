@@ -99,11 +99,18 @@ class ApartmentController extends Controller
             $visuals = $apartment->visual()->selectRaw('MONTHNAME(created_at) as month, COUNT(*) as count')
             ->whereYear('created_at', now()->year)
             ->groupByRaw('MONTHNAME(created_at)')
-            ->get();        
+            ->get();
+            
+            $allMonths = collect(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
+
+            $visuals = $allMonths->map(function($month) use($visuals){
+                $data = $visuals->firstWhere('month', $month);
+                return $data ? $data->count : 0;
+            });
             
             $sponsors = Sponsor::all();
 
-            return view('admin.apartments.show', compact('apartment', 'visuals', 'sponsors'));
+            return view('admin.apartments.show', compact('apartment', 'visuals', 'sponsors', 'allMonths'));
         }else{
             abort(403);
         }
