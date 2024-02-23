@@ -41,21 +41,27 @@ class ApartmentController extends Controller
 
         if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            $searchTerm = $request->input('search');
+            $searchTerm = $request->input('search'); // Aggiungi questa riga
             $client = new Client(['verify' => false]);
             $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
             $body = json_decode($response->getBody(), true);
 
             $resultsFound = false;
-
             foreach($body['results'] as $result) {
                 $latC = $result['position']['lat'];
                 $lonC = $result['position']['lon'];
 
+                $distLat = $radius / 110.574;
+                $distLon = $radius / (111.320 * cos(deg2rad($latC)));
+
+                $minLat = $latC - $distLat;
+                $maxLat = $latC + $distLat;
+                $minLon = $lonC - $distLon;
+                $maxLon = $lonC + $distLon;
+                
                 $apartments->where('visible', '=', 1)
-                ->orWhere(function ($query) use ($radius, $latC, $lonC) {
-                    $query->whereRaw('( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lon ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) <= ?', [$latC, $lonC, $latC, $radius]);
-                });
+                ->orWhereBetween('lat', [$minLat, $maxLat])
+                ->whereBetween('lon', [$minLon, $maxLon]);
 
                 $resultsFound = true;
             }
@@ -65,7 +71,6 @@ class ApartmentController extends Controller
                 $apartments->where('id', '=', 0);
             }
         }
-
 
         if ($request->filled('rooms')) {
             $apartments->where('rooms', '>=', $request->input('rooms'));
@@ -93,28 +98,8 @@ class ApartmentController extends Controller
 
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
-        $filteredApartments->load('user', 'images', 'sponsors');
 
-        // Calcola la distanza per ogni appartamento e ordina
-        if ($request->filled('radius')) {
-            $lat = $body['results'][0]['position']['lat'];
-            $lon = $body['results'][0]['position']['lon'];
-
-            // Creiamo un array associativo con distanze come chiavi e appartamenti come valori
-            $apartmentsWithDistances = [];
-            foreach ($filteredApartments as $apartment) {
-                $apartment->distance = $this->calculateDistance($lat, $lon, $apartment->lat, $apartment->lon);
-                $apartmentsWithDistances[$apartment->distance] = $apartment;
-            }
-
-            // Ordiniamo l'array associativo in base alle chiavi (distanze)
-            ksort($apartmentsWithDistances);
-
-            // Otteniamo solo i valori (gli appartamenti ordinati)
-            $filteredApartments = collect(array_values($apartmentsWithDistances));
-        }
-
-        return response()->json($filteredApartments);
+        return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
 
     public function calculateDistance($lat1, $lon1, $lat2, $lon2){
