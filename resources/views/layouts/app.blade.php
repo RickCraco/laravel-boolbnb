@@ -36,7 +36,12 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto align-items-center">
+                        <li class="nav-item">
+                            <div>
+                                <img src="/img/logo.png" alt="logo" width="80" height="70">
+                            </div>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{url('admin') }}">{{ __('Control Panel') }}</a>
                         </li>

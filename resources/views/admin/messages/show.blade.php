@@ -88,7 +88,7 @@
             <tr>
                 <td class="subscription" width="300">
                     <div>
-                        <img src="public/img/logo.png" alt="logo" width="70" height="70">
+                        <img src="/img/logo.png" alt="logo" width="80" height="70">
                     </div>
                 </td>
             </tr>
