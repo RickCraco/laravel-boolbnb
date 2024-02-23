@@ -67,10 +67,7 @@
                               </tr>
                             </table><br>
                             <p>Message:</p>
-                              {{-- <p class="caption fs-6">{{ $message->body }}</p> --}}
-                              <p class="caption fs-6">Cari interessati,
-                                Vi scrivo per segnalarvi un'appartamento incredibile appena disponibile per l'affitto. Questo gioiello presenta una combinazione perfetta di comfort moderno e design accattivante. Situato in una zona tranquilla ma comodamente collegata, offre spazi luminosi, una cucina completamente attrezzata e una vista mozzafiato. Non perdete l'opportunità di chiamarlo casa vostra!
-                                Per maggiori dettagli e per organizzare una visita, non esitate a contattarmi al più presto. Questa potrebbe essere l'occasione che stavate cercando per trovare il vostro rifugio ideale. Attendiamo con impazienza di accompagnarvi alla scoperta di questo fantastico appartamento.</p>
+                              <p class="caption fs-6">{{ $message->body }}</p>
                             </td>
                         </tr>
                         </tbody>
