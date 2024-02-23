@@ -108,7 +108,7 @@
 
                 <div class="mb-3">
                     <div>
-                        <img  id="uploadPreview" src="https://via.placeholder.com/300x200" alt="PlaceHolder">
+                        <img  id="uploadPreview" style="width: 300px; height: 200px;" src="https://via.placeholder.com/300x200" alt="PlaceHolder">
                     </div>
                 </div>
 
