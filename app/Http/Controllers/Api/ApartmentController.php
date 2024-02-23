@@ -102,8 +102,14 @@ class ApartmentController extends Controller
         return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
 
-
-
+    public function calculateDistance($lat1, $lon1, $lat2, $lon2){
+        $theta = $lon1 - $lon2;
+        $distance = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $distance = acos($distance);
+        $distance = rad2deg($distance);
+        $distance = $distance * 60 * 1.1515;
+        return round($distance, 2);
+    }
 
     public function recordView(Apartment $apartment, Request $request){
         $userIP = $request->ip();

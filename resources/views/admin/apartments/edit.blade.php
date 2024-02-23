@@ -131,7 +131,7 @@
             <div class="col-12">
                 <div class="mb-3">
                     <label class="text-white" for="desc">Description</label>
-                    <textarea class="form-control mt-2 @error('desc') is-invalid @enderror" name="desc" id="desc" rows="5">{{ old('desc') }}</textarea>
+                    <textarea class="form-control mt-2 @error('desc') is-invalid @enderror" name="desc" id="desc" rows="5">{{ old('title', $apartment->desc) }}</textarea>
                     @error('desc')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
