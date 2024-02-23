@@ -85,10 +85,10 @@
             <tr>
                 <td class="border" colspan="2">&nbsp;</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td class="subscription" width="300">
-                    <div class="logo-image">
-                        <img src="/public/img/logo-alt.png" alt="logo-alt" width="70" height="70">
+                    <div>
+                        <img src="public/img/logo.png" alt="logo" width="70" height="70">
                     </div>
                 </td>
             </tr>
