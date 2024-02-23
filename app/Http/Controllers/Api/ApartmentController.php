@@ -114,8 +114,6 @@ class ApartmentController extends Controller
             $filteredApartments = collect(array_values($apartmentsWithDistances));
         }
 
-        
-
         return response()->json($filteredApartments);
     }
 
