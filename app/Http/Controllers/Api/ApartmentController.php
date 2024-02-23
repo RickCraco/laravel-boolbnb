@@ -99,17 +99,25 @@ class ApartmentController extends Controller
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
 
-        if($request->filled('radius')){
+        // Calcola la distanza per ogni appartamento e ordina
+        if ($request->filled('radius')) {
             $lat = $body['results'][0]['position']['lat'];
             $lon = $body['results'][0]['position']['lon'];
 
-            $filteredApartments = $filteredApartments->map(function($apartment) use ($lat, $lon){
+            // Creiamo un array associativo con distanze come chiavi e appartamenti come valori
+            $apartmentsWithDistances = [];
+            foreach ($filteredApartments as $apartment) {
                 $apartment->distance = $this->calculateDistance($lat, $lon, $apartment->lat, $apartment->lon);
-                return $apartment;
-            });
+                $apartmentsWithDistances[$apartment->distance] = $apartment;
+            }
 
-            $filteredApartments = $filteredApartments->sortBy('distance');
+            // Ordiniamo l'array associativo in base alle chiavi (distanze)
+            ksort($apartmentsWithDistances);
+
+            // Otteniamo solo i valori (gli appartamenti ordinati)
+            $filteredApartments = collect(array_values($apartmentsWithDistances));
         }
+
 
         return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
