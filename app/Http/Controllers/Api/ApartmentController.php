@@ -41,21 +41,27 @@ class ApartmentController extends Controller
 
         if ($request->filled('radius')) {
             $radius = $request->input('radius');
-            $searchTerm = $request->input('search');
+            $searchTerm = $request->input('search'); // Aggiungi questa riga
             $client = new Client(['verify' => false]);
             $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/' . $searchTerm . '.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
             $body = json_decode($response->getBody(), true);
 
             $resultsFound = false;
-
             foreach($body['results'] as $result) {
                 $latC = $result['position']['lat'];
                 $lonC = $result['position']['lon'];
 
-                $apartments->orWhere(function ($query) use ($radius, $latC, $lonC) {
-                    $query->where('visible', '=', 1)
-                        ->whereRaw('( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lon ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) <= ?', [$latC, $lonC, $latC, $radius]);
-                });
+                $distLat = $radius / 110.574;
+                $distLon = $radius / (111.320 * cos(deg2rad($latC)));
+
+                $minLat = $latC - $distLat;
+                $maxLat = $latC + $distLat;
+                $minLon = $lonC - $distLon;
+                $maxLon = $lonC + $distLon;
+                
+                $apartments->where('visible', '=', 1)
+                ->orWhereBetween('lat', [$minLat, $maxLat])
+                ->whereBetween('lon', [$minLon, $maxLon]);
 
                 $resultsFound = true;
             }
