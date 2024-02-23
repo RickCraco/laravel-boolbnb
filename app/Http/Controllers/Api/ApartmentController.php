@@ -99,11 +99,29 @@ class ApartmentController extends Controller
         // Esegui la query e restituisci i risultati
         $filteredApartments = $apartments->get();
 
+        if($request->filled('radius')){
+            $lat = $body['results'][0]['position']['lat'];
+            $lon = $body['results'][0]['position']['lon'];
+
+            $filteredApartments = $filteredApartments->map(function($apartment) use ($lat, $lon){
+                $apartment->distance = $this->calculateDistance($lat, $lon, $apartment->lat, $apartment->lon);
+                return $apartment;
+            });
+
+            $filteredApartments = $filteredApartments->sortBy('distance');
+        }
+
         return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
     }
 
-
-
+    public function calculateDistance($lat1, $lon1, $lat2, $lon2){
+        $theta = $lon1 - $lon2;
+        $distance = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $distance = acos($distance);
+        $distance = rad2deg($distance);
+        $distance = $distance * 60 * 1.1515;
+        return round($distance, 2);
+    }
 
     public function recordView(Apartment $apartment, Request $request){
         $userIP = $request->ip();
