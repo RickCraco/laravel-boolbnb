@@ -104,6 +104,8 @@ class ApartmentController extends Controller
             $lat = $body['results'][0]['position']['lat'];
             $lon = $body['results'][0]['position']['lon'];
 
+            $filteredApartments->load(['user', 'images', 'sponsors']);
+
             // Creiamo un array associativo con distanze come chiavi e appartamenti come valori
             $apartmentsWithDistances = [];
             foreach ($filteredApartments as $apartment) {
@@ -119,7 +121,7 @@ class ApartmentController extends Controller
         }
 
 
-        return response()->json($filteredApartments->load(['user', 'images', 'sponsors']));
+        return response()->json($filteredApartments);
     }
 
     public function calculateDistance($lat1, $lon1, $lat2, $lon2){
