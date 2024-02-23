@@ -40,7 +40,7 @@
                 @if($apartment->sponsors->count() > 0)
                     <div class="mt-3">
                         <h2 class="mb-3">Premium until:</h2>
-                        <p>{{$apartment->sponsors->last()->pivot->end_date}}</p>
+                        <p id="formattedDate" class="fs-4">{{ $apartment->sponsors->last()->pivot->end_date }}</p>
                     </div>
                 @endif
             </div>
@@ -79,8 +79,8 @@
                     <thead>
                       <tr>
                         <th class="text-center" scope="col">Email</th>
-                        <th class="text-center" scope="col">Name</th>
-                        <th class="text-center" scope="col">Surname</th>
+                        <th class="text-center d-none d-sm-table-cell" scope="col">Name</th>
+                        <th class="text-center d-none d-sm-table-cell" scope="col">Surname</th>
                         <th class="text-center" scope="col">Date</th>
                         <th class="text-center" scope="col"><i class="fa-solid fa-gear"></i></th>
                       </tr>
@@ -89,9 +89,9 @@
                     @foreach ($apartment->messages->sortByDesc('created_at') as $item)
                         <tr>
                             <td class="text-center" scope="row">{{ $item->email }}</td>
-                            <td class="text-center">{{ $item->name }}</td>
-                            <td class="text-center">{{ $item->surname }}</td>
-                            <td class="text-center">{{ $item->created_at }}</td>
+                            <td class="text-center d-none d-sm-table-cell">{{ $item->name }}</td>
+                            <td class="text-center d-none d-sm-table-cell">{{ $item->surname }}</td>
+                            <td class="text-center">{{ $item->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center"><a href="{{ route('admin.messages.show', [$apartment, $item]) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
                         </tr>
                     @endforeach
@@ -137,5 +137,18 @@
                 }
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const originalDate = document.getElementById("formattedDate").textContent;
+            const formattedDate = formatDateString(originalDate);
+            document.getElementById("formattedDate").textContent = formattedDate;
+        });
+
+        function formatDateString(dateString) {
+            const date = new Date(dateString);
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('it-IT', options);
+        }
+
     </script>
 @endsection
