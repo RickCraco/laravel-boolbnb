@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section class="container my-4 px-0">
-        <h1 class="text-white">Create Apartment <span class="fs-6 ms-3 text-danger"> Fields marked with * are required!</span></h1>
+        <h1 class="text-white ps-2">Create Apartment <br> <span class="fs-6 text-danger"> Fields marked with * are required!</span></h1>
         @if ($errors->any())
             <div class="alert  alert-danger">
                 <ul>

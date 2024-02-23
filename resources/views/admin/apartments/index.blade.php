@@ -9,7 +9,7 @@
             <div class="alert alert-success mt-4">{{ session()->get('message') }}</div>
         @endif
 
-        <ul class="list-group">
+        <ul class="list-group py-2">
             @foreach($apartments as $apartment)
                 <li class="list-group-item d-flex align-items-center justify-content-between bg-dark text-white">
                     {{ $apartment->title }}

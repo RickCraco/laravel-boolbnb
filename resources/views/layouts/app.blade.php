@@ -36,10 +36,10 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto align-items-center">
+                    <ul class="navbar-nav me-auto align-items-sm-center">
                         <li class="nav-item">
                             <div>
-                                <img src="/img/logo.png" alt="logo" width="80" height="70">
+                                <img class="d-none d-sm-block" src="/img/logo.png" alt="logo" width="80" height="70">
                             </div>
                         </li>
                         <li class="nav-item">
@@ -68,7 +68,7 @@
                                 {{ Auth::user()->name }}
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right" style="left: -60px!important;" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url('admin') }}">{{__('Control Panel')}}</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

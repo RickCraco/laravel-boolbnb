@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5 pt-5">
+<div class="container mt-md-5 pt-md-5">
     <div class="row justify-content-center pt-5">
-        <div class="col-md-8">
+        <div class="col-md-8 pb-4">
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
 
@@ -43,7 +43,7 @@
                             <label for="birth_date" class="col-md-4 col-form-label text-md-right">{{ __('Birth Date') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" id="birth_date" required>
+                                <input type="date" max="{{ date('Y-m-d') }}" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" id="birth_date" required>
                                 @error('birth_date')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

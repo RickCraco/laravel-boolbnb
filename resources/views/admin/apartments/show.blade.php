@@ -55,16 +55,16 @@
               <div class="collapse" id="collapseExample">
                 <div class="card card-body">
                     <h2 class="text-center pb-3">Our Plans</h2>
-                    <div class="text-white d-flex justify-content-between">
+                    <div class="text-white d-md-flex justify-content-around">
                         @foreach($sponsors as $sponsor)
-                        <div class="card" style="width: 18rem;">
+                        <div class="card mb-2" style="width: 18rem;">
                             <div class="card-body">
                               <h5 class="card-title">{{ $sponsor->name }}</h5>
                               <h6 class="card-subtitle mb-2 text-body-secondary">Price: {{ $sponsor->price }}$</h6>
                               <p class="card-text">Duration: {{ $sponsor->duration }} @if($sponsor->duration > 1)Days @else Day @endif</p>
                               <a href="{{ route('admin.apartments.payment', ['apartment' => $apartment, 'sponsor_id' => $sponsor->id]) }}" class="btn btn-success">Pay now</a>
                             </div>
-                          </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>
