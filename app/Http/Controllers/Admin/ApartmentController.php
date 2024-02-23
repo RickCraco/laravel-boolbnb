@@ -50,19 +50,19 @@ class ApartmentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreApartmentRequest $request)
-    {   
+    {
         $formdata = $request->validated();
 
         $slug = Str::slug($formdata['title'], '-');
         $formdata['slug'] = $slug;
         $userId = Auth::id();
         $formdata['user_id'] = $userId;
-        
+
         $client = new Client(['verify' => false]);
         $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
 
         $body = json_decode($response->getBody(), true);
-        
+
         $formdata['lat'] = $body['results'][0]['position']['lat'];
         $formdata['lon'] = $body['results'][0]['position']['lon'];
 
@@ -72,7 +72,7 @@ class ApartmentController extends Controller
         }
 
         $newApartment = Apartment::create($formdata);
-        
+
         if($request->hasFile('images')){
             $images = $request->file('images');
 
@@ -80,7 +80,7 @@ class ApartmentController extends Controller
                 $path = Storage::put('images', $image);
                 $newApartment->images()->create(['url' => $path, 'title' => $newApartment->title, 'apartment_id' => $newApartment->id]);
             }
-        } 
+        }
 
         if($request->has('services')){
             $newApartment->services()->attach($request->services);
@@ -100,14 +100,14 @@ class ApartmentController extends Controller
             ->whereYear('created_at', now()->year)
             ->groupByRaw('MONTHNAME(created_at)')
             ->get();
-            
-            $allMonths = collect(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
+
+            $allMonths = collect(['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January']);
 
             $visuals = $allMonths->map(function($month) use($visuals){
                 $data = $visuals->firstWhere('month', $month);
                 return $data ? $data->count : 0;
             });
-            
+
             $sponsors = Sponsor::all();
 
             return view('admin.apartments.show', compact('apartment', 'visuals', 'sponsors', 'allMonths'));
@@ -144,7 +144,7 @@ class ApartmentController extends Controller
         if($apartment->user_id != Auth::id()){
             abort(403);
         }
-        
+
         $sponsorId = $request->input('sponsor_id');
         $sponsor = Sponsor::findOrFail($sponsorId);
 
@@ -199,7 +199,7 @@ class ApartmentController extends Controller
         $response = $client->request('GET', 'https://api.tomtom.com/search/2/geocode/'.$formdata['address'].'.json?key=2HI9GWKpWiwAq3zKIGlnZVdmoLe7u7xs');
 
         $body = json_decode($response->getBody(), true);
-        
+
         $formdata['lat'] = $body['results'][0]['position']['lat'];
         $formdata['lon'] = $body['results'][0]['position']['lon'];
 
