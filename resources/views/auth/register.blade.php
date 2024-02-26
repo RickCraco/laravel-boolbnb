@@ -116,13 +116,13 @@
         if(psw == confirmPsw && psw != "" && confirmPsw != "") {
             submitButton.disabled = false;
             pswError.style.color = 'green';
-            pswError.innerHTML = "Passwords match!";
+            pswError.innerHTML = "Password matches!";
         }else if(psw == '' && confirmPsw == '' ){
             pswError.innerHTML = "";
         } else {
             submitButton.disabled = true;
             pswError.style.color = 'red';
-            pswError.innerHTML = "Passwords don't match!";
+            pswError.innerHTML = "Password doesn't match!";
         }
     }
 

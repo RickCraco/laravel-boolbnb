@@ -33,7 +33,7 @@
                     <h2 class="mb-3">Services:</h2>
                     <ul class="list-unstyled d-flex flex-wrap">
                         @foreach ($apartment->services as $item)
-                            <li class="fs-4 col-12 col-md-6 col-lg-4 my-2"><i class="{{ $item->icon }} me-2"></i>{{ $item->name }}</li>
+                            <li class="fs-5 col-12 col-md-6 col-lg-4 my-2"><i class="{{ $item->icon }} me-2"></i>{{ $item->name }}</li>
                         @endforeach
                     </ul>
                 </div>
